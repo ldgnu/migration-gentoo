@@ -1,0 +1,36 @@
+# Secretos y credenciales — nunca commitear
+.env
+.env.*
+*.key
+*.pem
+*.p12
+*.pfx
+*_rsa
+id_rsa*
+id_ed25519*
+secrets/
+private/
+*.secret
+
+# Configuración sensible del sistema
+configs/shadow
+configs/gshadow
+configs/**/wpa_supplicant.conf
+configs/**/authorized_keys
+
+# Artefactos y basura
+distfiles/
+packages/
+*.iso
+*.qcow2
+*.img
+*.log
+*.tar.*
+*.zst
+__pycache__/
+.venv/
+
+# Editores
+.vscode/
+.idea/
+*.swp
