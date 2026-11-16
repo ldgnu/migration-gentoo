@@ -274,6 +274,10 @@ make install
 
 ![Compilación con j6](img/04-compilacion.png)
 
+Y cuando entra al kernel propiamente dicho:
+
+![Compilando el kernel](img/05-compilacion-kernel.png)
+
 Con `installkernel` en `USE="dracut grub"`, ese último paso genera el initramfs y actualiza
 `grub.cfg` solo.
 
