@@ -6,7 +6,6 @@ es lo que pasó en esta máquina.
 
 Entorno: CachyOS como host, VM KVM con libvirt, disco virtio de 50 GB, firmware BIOS.
 
-![Arranque del live](img/01-live-boot.png)
 
 ---
 
@@ -54,7 +53,6 @@ gpg: Firma correcta de "Gentoo Linux Release Engineering (Automated Weekly Relea
       13EBBDBEDE7A12775DFDB1BABB572E0E2D182910
 ```
 
-![Verificación GPG](img/02-verificacion-gpg.png)
 
 **Error típico:** pedir `...tar.asc` en vez de `...tar.xz.asc`, o verificar el archivo
 directamente con gpg (`invalid packet`). El `.asc` tiene que corresponder al nombre exacto.
@@ -117,7 +115,6 @@ Los tipos se confirman con `sfdisk -d`, porque `lsblk -f` no muestra el GUID:
 /dev/vda3 : type=0657FD6D-A4AB-43C4-84E5-0933C84B4F4F   (Linux swap)
 ```
 
-![Particionado en cfdisk](img/03-particionado.png)
 
 **Error típico:** escribir el tipo equivocado en `vda1`. Se cambia con `Type` en cfdisk
 antes de escribir la tabla.
@@ -158,7 +155,6 @@ tar xpvf stage3-amd64-openrc-<fecha>.tar.xz \
 
 `-C` fija el destino: el live corre en RAM, y extraer 1.5 GB en tmpfs puede matar la sesión.
 
-![Extracción del stage3](img/04-stage3.png)
 
 ---
 
@@ -206,7 +202,6 @@ eselect profile list
 Perfil elegido: `default/linux/amd64/23.0/no-multilib`. Sin perfil de escritorio: es un
 servidor.
 
-![Sync del árbol](img/05-emerge-sync.png)
 
 ---
 
@@ -287,9 +282,8 @@ El target es el **disco**, no una partición. Con `/dev/vda2` falla con
 
 Apagar la VM, sacar el CD y arrancar del disco.
 
-![Primer arranque](img/07-primer-boot.png)
 
 ---
 
-Nota sobre las capturas: los archivos `img/*.png` los tiene que subir el autor del repo.
-Las referencias quedan acá para que el documento se complete solo.
+Nota sobre las capturas: se agregan cuando existen. Las que faltan se toman en el momento
+en que ocurre cada etapa; no se reconstruyen después.

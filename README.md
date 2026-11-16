@@ -54,6 +54,12 @@ Solo cuando el texto no alcanza: una salida de `emerge`, el menú de GRUB, el pr
 arranque. Nunca capturas con direcciones IP públicas, claves, tokens ni rutas que
 expongan el usuario real.
 
+Para capturar directo a archivo:
+
+```
+maim -g <ancho>x<alto>+<x>+<y> docs/img/nombre.png
+```
+
 ## Reglas del repositorio
 
 - Solo texto y configuración. Nada de binarios ni artefactos de compilación.
