@@ -292,6 +292,10 @@ grub-install /dev/vda
 El target es el **disco**, no una partición. Con `/dev/vda2` falla con
 `will not proceed with blocklists`.
 
+El menú de GRUB quedando así:
+
+![Menú de GRUB](img/06-grub-menu.png)
+
 ---
 
 ## 14. Primer arranque

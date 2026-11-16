@@ -359,6 +359,40 @@ Qué aprendí:
 antes de entrar. Por eso `cp --dereference /etc/resolv.conf` quedó duplicado: el flag `-L`
 ya lo había resuelto.
 
+## 2026-11-16 — Kernel compilado y primer arranque
+
+Qué hice:
+Compilé el kernel a mano, instalé los módulos y el bootloader.
+
+Comandos:
+```
+make -j6
+make modules_install
+make install
+grub-install /dev/vda
+```
+
+Verificación:
+```
+/boot/vmlinuz-6.18.63-gentoo          20 MB
+/boot/initramfs-6.18.63-gentoo.img    9.6 MB
+/boot/System.map-6.18.63-gentoo       12 MB
+menuentry 'Gentoo GNU/Linux' ... 6.18.63-gentoo
+```
+
+Qué falló:
+- El primer `make` corrió sin `-j`: 18 minutos, 1167 objetos y load average 1.00 con seis
+  hilos disponibles. Se cortó y se relanzó con `make -j6`, que retomó desde donde estaba.
+- `sudo virsh snapshot-create-as` ejecutado **dentro** de la VM: `virsh: command not found`.
+  `virsh` es del host; el snapshot se hace desde afuera.
+- `grub-install /dev/vda2` y `grub-install /boot/` fallaron: el primero por blocklists, los
+  otros dos porque un directorio no es un dispositivo.
+
+Qué aprendí:
+`make install` con `installkernel` en `USE="dracut grub"` genera el initramfs y corre
+`grub-mkconfig` solo. Lo único manual es `grub-install` en el disco.
+Y un `make` sin `-j` en un kernel se nota: 1167 objetos en 18 minutos es un proceso por vez.
+
 ## 2026-11-15 — repos.conf y primer sync
 
 Qué hice:
