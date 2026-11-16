@@ -31,13 +31,14 @@ anda", sino un registro verificable de decisiones, errores y resoluciones.
 ```
 README.md          este archivo
 docs/guia.md       recorrido paso a paso de la instalación
+docs/bare-metal.md qué cambia al instalar en hardware real
 docs/decisiones.md cada bifurcación y el motivo de la elección
 docs/bitacora.md   fecha, qué se rompió, cómo se resolvió
 docs/conceptos.md  explicaciones con analogías
 docs/retomar.md    cómo volver al chroot después de apagar
 docs/img/          capturas de pantalla
 configs/           portage, make.conf, kernels, servicios
-scripts/           bootstrap y post-instalación
+scripts/           bootstrap, post-instalación y sync de configs
 ```
 
 ## Capturas
