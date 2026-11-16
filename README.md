@@ -20,9 +20,10 @@ anda", sino un registro verificable de decisiones, errores y resoluciones.
 | Recurso | Valor |
 |---|---|
 | Host | i5-10400F (6c/12t) |
-| vCPU asignadas | 6 |
-| RAM asignada | 6 GB |
-| Disco | 40 GB (qcow2) |
+| vCPU asignadas | 8 |
+| RAM asignada | 8 GB |
+| Disco | 50 GB (qcow2, virtio) |
+| Firmware | BIOS (SeaBIOS), no UEFI |
 | Host OS | CachyOS, btrfs + LUKS |
 
 ## Estructura
@@ -31,9 +32,26 @@ anda", sino un registro verificable de decisiones, errores y resoluciones.
 README.md          este archivo
 docs/decisiones.md cada bifurcación y el motivo de la elección
 docs/bitacora.md   fecha, qué se rompió, cómo se resolvió
+docs/conceptos.md  explicaciones con analogías
+docs/retomar.md    cómo volver al chroot después de apagar
+docs/img/          capturas de pantalla
 configs/           portage, make.conf, kernels, servicios
 scripts/           bootstrap y post-instalación
 ```
+
+## Capturas
+
+En `docs/img/`, con nombres que describan el momento:
+
+```
+01-emerge-inicial.png
+02-grub-menu.png
+03-primer-boot.png
+```
+
+Solo cuando el texto no alcanza: una salida de `emerge`, el menú de GRUB, el primer
+arranque. Nunca capturas con direcciones IP públicas, claves, tokens ni rutas que
+expongan el usuario real.
 
 ## Reglas del repositorio
 
@@ -42,5 +60,13 @@ scripts/           bootstrap y post-instalación
 - Todo secreto que entre al historial sigue ahí cuando el repo se haga público.
 
 ## Estado
+
+Instalación en curso. Sistema base instalado, kernel en configuración. Ver `docs/retomar.md`
+para el estado detallado y lo que falta.
+
+## Por qué configurar el kernel a mano
+
+El handbook lista siete razones para hacerlo. La quinta es "aburrimiento severo".
+
 
 Planificación. Sin instalación iniciada.
