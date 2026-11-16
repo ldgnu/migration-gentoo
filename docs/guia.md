@@ -6,6 +6,11 @@ es lo que pasó en esta máquina.
 
 Entorno: CachyOS como host, VM KVM con libvirt, disco virtio de 50 GB, firmware BIOS.
 
+El handbook lista siete razones para configurar el kernel a mano. La quinta es
+"aburrimiento severo", y es la que aplica acá:
+
+![El handbook y la razón número cinco](img/01-handbook-aburrimiento.png)
+
 
 ---
 
@@ -233,6 +238,11 @@ passwd
 
 ## 12. Kernel
 
+Antes de compilar: `gentoo-kernel` (distribution kernel) resuelve todo solo, compilando con
+la configuración de Gentoo. Se descartó a propósito para hacer la configuración a mano.
+
+![emerge de gentoo-kernel, descartado](img/02-emerge-kernel.png)
+
 ```
 emerge --ask sys-kernel/gentoo-sources
 eselect kernel set 1
@@ -252,7 +262,7 @@ CONFIG_DEVTMPFS
 CONFIG_DEVTMPFS_MOUNT
 ```
 
-![menuconfig](img/06-menuconfig.png)
+![menuconfig](img/03-menuconfig.png)
 
 Compilar e instalar:
 
@@ -261,6 +271,8 @@ make -j6
 make modules_install
 make install
 ```
+
+![Compilación con j6](img/04-compilacion.png)
 
 Con `installkernel` en `USE="dracut grub"`, ese último paso genera el initramfs y actualiza
 `grub.cfg` solo.

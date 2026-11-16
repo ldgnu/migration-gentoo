@@ -45,9 +45,10 @@ scripts/           bootstrap y post-instalación
 En `docs/img/`, con nombres que describan el momento:
 
 ```
-01-emerge-inicial.png
-02-grub-menu.png
-03-primer-boot.png
+01-handbook-aburrimiento.png
+02-emerge-kernel.png
+03-menuconfig.png
+04-compilacion.png
 ```
 
 Solo cuando el texto no alcanza: una salida de `emerge`, el menú de GRUB, el primer
@@ -57,7 +58,7 @@ expongan el usuario real.
 Para capturar directo a archivo:
 
 ```
-maim -g <ancho>x<alto>+<x>+<y> docs/img/nombre.png
+maim -s docs/img/nombre.png
 ```
 
 ## Reglas del repositorio
