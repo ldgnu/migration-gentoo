@@ -30,6 +30,7 @@ anda", sino un registro verificable de decisiones, errores y resoluciones.
 
 ```
 README.md          este archivo
+docs/guia.md       recorrido paso a paso de la instalación
 docs/decisiones.md cada bifurcación y el motivo de la elección
 docs/bitacora.md   fecha, qué se rompió, cómo se resolvió
 docs/conceptos.md  explicaciones con analogías
