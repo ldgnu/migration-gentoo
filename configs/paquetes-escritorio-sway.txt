@@ -1,0 +1,36 @@
+# Escritorio mínimo: Sway (Wayland). Instalar con:
+#   emerge --ask $(grep -v '^#' configs/paquetes-escritorio-sway.txt | xargs)
+
+# --- compositor y base Wayland (sin Xorg) ---
+gui-libs/wlroots
+gui-wm/sway
+x11-base/xwayland            # solo para apps X11 sueltas (opcional pero recomendado)
+gui-apps/swaybg
+gui-apps/swaylock
+gui-apps/swayidle
+
+# --- terminal y launcher ---
+gui-apps/foot                # terminal Wayland nativa, liviana
+gui-apps/wofi                # launcher tipo dmenu
+gui-apps/mako                # notificaciones
+gui-apps/wl-clipboard
+gui-apps/grim
+gui-apps/slurp
+
+# --- fuentes (sin esto no se ve texto) ---
+media-fonts/dejavu
+media-fonts/noto
+media-fonts/liberation-fonts
+
+# --- entrada / sesión ---
+dev-libs/libinput
+sys-auth/seatd               # OpenRC: dueño de /dev/dri y /dev/input
+sys-auth/elogind             # logind en OpenRC (lo usa el agente sway)
+gui-apps/gtkgreet            # opcional: login gráfico
+
+# --- audio (opcional para arrancar, necesario para tener sonido) ---
+media-video/pipewire
+media-video/wireplumber
+media-libs/libpulse
+media-sound/alsa-utils
+sys-auth/rtkit

@@ -25,7 +25,7 @@ Intel GbE · audio HDA Intel + HDMI · BT TP-Link USB.
 | 6 | `fstab`, hostname, red, usuarios | chroot | 15 min |
 | 7 | GRUB UEFI | chroot | 5 min |
 | 8 | Primer arranque | target | 10 min |
-| 9 | Escritorio (Xorg, i3) | target | 60 min |
+| 9 | Escritorio (Xorg+i3 **o** Sway/Wayland §9-bis) | target | 60 min |
 | 10 | Audio y Bluetooth | target | 30 min |
 | 11 | Limpieza y verificación final | target | 10 min |
 
@@ -467,6 +467,101 @@ Verificación: `xrandr` lista el modo nativo del monitor · `glxinfo | grep "Ope
 dice `AMD Radeon RX 6600`.
 
 ---
+
+## 9-bis. Alternativa: Sway (Wayland puro, sin Xorg)
+
+Si preferís Wayland, **no instales Xorg**. Todo lo de la sección 9 se reemplaza por esto.
+Sway en OpenRC usa **elogind** (no systemd).
+
+### Kernel: lo que agrega Wayland
+
+```
+CONFIG_DRM_AMDGPU=m          # ya está
+CONFIG_DRM_FBDEV_EMULATION=y # consola + fbcon mientras arranca el compositor
+```
+
+### Paquetes
+
+```bash
+emerge --ask gui-libs/wlroots gui-wm/sway x11-base/xwayland
+emerge --ask gui-apps/foot gui-apps/wofi gui-apps/mako gui-apps/swaybg \
+            gui-apps/swaylock gui-apps/swayidle gui-apps/wl-clipboard
+emerge --ask media-fonts/dejavu media-fonts/noto
+emerge --ask dev-libs/libinput sys-auth/elogind
+```
+
+`configs/paquetes-escritorio-sway.txt` tiene la lista completa.
+
+### USE flags
+
+```bash
+mkdir -p /etc/portage/package.use
+cat > /etc/portage/package.use/sway <<'EOF'
+gui-wm/sway elogind gtk tray
+gui-libs/wlroots elogind
+sys-auth/seatd server
+EOF
+```
+
+Y en `make.conf` el USE global **sin `X`** (con `X` se arrastra medio Xorg):
+
+```
+USE="bluetooth dbus elogind wayland"
+```
+
+> Sin `elogind` el compositor arranca pero no puede abrir `/dev/dri/card0` ni tomar el
+> teclado: `sway: unable to open backend`. Es el error número uno.
+
+### Servicios (OpenRC)
+
+```bash
+rc-update add elogind default
+rc-service elogind start
+```
+
+`seatd` **no** se activa si usás elogind: son dos formas de conseguir lo mismo y pelearse
+rompe la sesión. Con elogind alcanza.
+
+### Config mínima
+
+```bash
+mkdir -p ~/.config/sway
+cp /ruta/configs/sway-config.txt ~/.config/sway/config
+```
+
+La config del repo ya trae: `$mod=Mod4`, `foot` en `Mod+Return`, `wofi` en `Mod+d`,
+workspaces 1-9, foco/mover con vim keys, volumen con `wpctl`, barra con reloj, `swaylock`
+en `Mod+Escape`. **Cambiá `output * resolution`** al modo real del monitor.
+
+`output * bg` va antes que nada: sin salida configurada la pantalla queda negra y parece
+que no arrancó.
+
+### Arrancar
+
+Sin display manager, desde la consola de `javi`:
+
+```bash
+# si el sistema bootea en modo texto (recomendado: predecible y rápido)
+echo '[[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && exec dbus-run-session sway' >> ~/.bash_profile
+```
+
+O a mano, para la primera vez:
+
+```bash
+dbus-run-session sway
+```
+
+### Verificación
+
+```bash
+swaymsg -t get_outputs        # lista la salida y el modo activo
+swaymsg -t get_version
+dmesg | grep -i amdgpu | tail
+foot                          # abre terminal (Mod+Return)
+```
+
+Si `swaymsg` dice `Unable to connect to /run/user/1000/sway-ipc.*` → corriste sway sin
+`dbus-run-session` o sin `elogind` activo. No es la config.
 
 ## 10. Audio (PipeWire) y Bluetooth
 

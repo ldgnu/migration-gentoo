@@ -1,0 +1,7 @@
+# Sway en OpenRC: usa elogind (NO systemd). seatd no hace falta con elogind,
+# pero conviven sin problema. El agente sway necesita el grupo "sway" o elogind.
+gui-wm/sway elogind gtk tray
+gui-libs/wlroots elogind
+dev-libs/libinput
+sys-auth/seatd server
+gui-apps/foot
