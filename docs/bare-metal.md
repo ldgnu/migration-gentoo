@@ -1,114 +1,173 @@
-# Instalar en hardware real
+# Instalación en hardware real — esta máquina
 
-La guía principal se hizo en una VM. Esto es lo que cambia cuando el destino es una
-máquina física, y lo que hay que resolver antes de tocar un disco con datos.
+Datos relevados del sistema actual (CachyOS) con `lspci`, `lsusb`, `lsblk` y `lscpu`.
+Reemplazan las suposiciones de la versión genérica de esta guía.
 
-## Antes de tocar nada
+## Hardware
 
-1. **Backup completo y verificado.** No "tengo las cosas en otro lado": un backup que se
-   probó restaurando. El disco del host tiene ~400 GB en uso.
-2. **Decidir el alcance:** reemplazo total de la distro actual, o dual boot en un disco
-   aparte. Dual boot es más seguro y más lento de mantener.
-3. **Averiguar el hardware real.** Con el sistema actual andando:
+| Componente | Modelo | Driver |
+|---|---|---|
+| CPU | Intel Core i5-10400F (6c/12t, Comet Lake) | `intel_pstate`, `skl_uncore` |
+| GPU | AMD Radeon RX 6600 (Navi 23) | `amdgpu` |
+| Audio GPU | AMD Navi 21/23 HDMI/DP | `snd_hda_intel` |
+| Audio placa | Intel 400 Series HD Audio | `snd_hda_intel` |
+| Red | Intel 400 Series GbE | `e1000e` |
+| Disco principal | WD PC SN740 512 GB (NVMe) | `nvme` |
+| SATA | Intel 400 Series AHCI | `ahci` |
+| USB | Intel xHCI 3.2 Gen 2x1 | `xhci_pci` |
+| SMBus | Intel 400 Series | `i2c_i801` |
 
-```
-lspci -nnk | grep -A3 -E 'VGA|Ethernet|Network'
-lsblk -o NAME,SIZE,MODEL
-nproc
-free -h
-[ -d /sys/firmware/efi ] && echo UEFI || echo BIOS
-```
+## Firmware: UEFI
 
-## Qué cambia respecto de la VM
+El sistema actual arranca en **UEFI**, no en BIOS. Eso cambia dos cosas respecto de la VM:
 
-| En la VM | En hardware real |
-|---|---|
-| Disco `vda` (virtio) | NVMe (`nvme0n1`) o SATA (`sda`) |
-| Red virtio | `e1000e`, `r8169`, `iwlwifi` según placa |
-| GPU virtual | `amdgpu` (Radeon), `i915` (Intel) |
-| BIOS (SeaBIOS) | Probablemente UEFI |
-| Sin firmware | `linux-firmware` y microcódigo hacen falta |
-| `-march=skylake` | Igual, o `native` si no va a migrar |
+1. Hace falta una **EFI System Partition** (en este equipo ya existe: `nvme0n1p1`, 4 GB, vfat).
+2. El bootloader se instala con `--target=x86_64-efi`, y `efibootmgr` pasa a ser útil.
 
-## Drivers del kernel que no pueden faltar
+Sin Secure Boot, como se decidió. Eso evita firmar kernel y módulos.
 
-Disco:
+## Discos
 
-```
-CONFIG_BLK_DEV_NVME=y      # si el disco es NVMe
-CONFIG_SATA_AHCI=y         # si es SATA
-```
+| Disco | Tamaño | Contenido actual |
+|---|---|---|
+| `nvme0n1` | 476 GB | CachyOS: p1 4G EFI + p2 472G LUKS/btrfs |
+| `sda` | 465 GB | NTFS, datos (`/mnt/PirateGames`) |
+| `sdb` | 931 GB | exFAT, datos (`/mnt/PirateNW`) |
+| `sdc` | 111 GB | Windows: p1 EFI 260M, p2 MSR, p3 NTFS |
 
-Red:
+**El disco de destino es `nvme0n1`.** Instalar ahí implica perder CachyOS y todo lo que
+tiene adentro. Los otros tres discos no se tocan si se elige bien el dispositivo.
 
-```
-CONFIG_E1000E=y            # Intel
-CONFIG_R8169=y             # Realtek
-CONFIG_IWLWIFI=m           # wifi Intel (requiere firmware)
-```
+## Drivers obligatorios en el kernel
 
-Entrada y consola:
+Si alguno de estos falta, el sistema no arranca o queda sin hardware:
 
 ```
-CONFIG_USB_HID=y
-CONFIG_INPUT_EVDEV=y
-CONFIG_FB_EFI=y            # consola en UEFI
-CONFIG_DRM=y
-CONFIG_DRM_AMDGPU=y        # o i915
-```
-
-Filesystem:
-
-```
-CONFIG_EXT4_FS=y
+CONFIG_EFI=y
+CONFIG_EFI_STUB=y
+CONFIG_BLK_DEV_NVME=y        # disco raíz
+CONFIG_EXT4_FS=y             # sistema de archivos
 CONFIG_DEVTMPFS=y
 CONFIG_DEVTMPFS_MOUNT=y
+CONFIG_VFAT_FS=y             # partición EFI si se monta
+CONFIG_FB_EFI=y              # consola en UEFI
+CONFIG_USB_XHCI_HCD=y        # todos los periféricos
+CONFIG_USB_HID=y
+CONFIG_HID_GENERIC=y
+CONFIG_INPUT_EVDEV=y
+CONFIG_E1000E=y              # red
+CONFIG_DRM=y
+CONFIG_DRM_AMDGPU=y          # GPU (consola y 3D)
+CONFIG_SND=y
+CONFIG_SND_HDA_INTEL=y       # audio
+CONFIG_SND_USB_AUDIO=y       # headset USB
+CONFIG_SATA_AHCI=y           # discos SATA de datos
+CONFIG_NTFS3_FS=m            # leer los discos NTFS
+CONFIG_EXFAT_FS=m            # leer el disco exFAT
 ```
 
-Si alguno de los del disco o del filesystem queda como módulo y no hay initramfs, el
-sistema no arranca.
-
-## Si la máquina es UEFI
-
-Cambia el particionado y el bootloader:
-
-| Partición | Tamaño | Tipo | Uso |
-|---|---|---|---|
-| p1 | 512 MiB | EFI System (EF00) | /efi o /boot |
-| p2 | 4 GiB | swap | swap |
-| p3 | resto | ext4 | / |
+Bluetooth (adaptador USB TP-Link):
 
 ```
-grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=Gentoo
+CONFIG_BT=m
+CONFIG_BT_HCIBTUSB=m
 ```
 
-Ya no hace falta la partición BIOS boot de 1 MiB, y `efibootmgr` pasa a tener sentido.
+## Periféricos conectados hoy
 
-## Firmware y microcódigo
+| Dispositivo | ID | Módulo |
+|---|---|---|
+| Apple Aluminium Keyboard | `05ac:024f` | `usbhid` (`hid-apple` opcional) |
+| Teclado/mouse inalámbrico YICHIP | `3151:3022` | `usbhid` |
+| Dongle F108Pro | — | `usbhid` |
+| Headset Redragon | `0d8c:0173` | `snd-usb-audio` |
+| Adaptador Bluetooth TP-Link | `2357:0604` | `btusb` |
 
-En hardware real sí sirven:
+Todos son USB HID o audio USB: con `USB_HID`, `HID_GENERIC` y `SND_USB_AUDIO` alcanza.
+No hay wifi en esta máquina.
+
+## Qué compilar y qué no
+
+La idea de "rendimiento a full" se logra con `-march=native` y USE flags ajustados, no con
+compilar todo. Un binario oficial compilado con `-O2` y x86-64-v3 rinde prácticamente igual
+que uno compilado en casa.
+
+**Compilar (vale la pena):**
+
+- Paquetes con tus USE flags: sin soporte de escritorio, con lo justo.
+- Paquetes chicos donde el binario no existe o no coincide.
+- El kernel, si se quiere control real (como en la VM).
+
+**Bajar binario (no vale la pena compilar):**
+
+| Paquete | Por qué |
+|---|---|
+| `sys-devel/gcc` | 40+ minutos, cero ganancia real |
+| `sys-devel/clang` / `llvm` | horas y RAM |
+| `dev-lang/rust` | 1-2 horas, y el binario es idéntico |
+| `www-client/firefox` / `chromium` | 2+ horas, y los binarios oficiales ya están optimizados |
+| `app-office/libreoffice` | horas, sin diferencia perceptible |
+| `sys-kernel/*-bin` | si se elige dist-kernel |
+| `sys-firmware/*` | firmware, no se compila |
+
+El binhost oficial de Gentoo cubre x86-64 y x86-64-v3. Para el resto, `emerge` compila.
+
+## Paquetes indispensables
+
+Base mínima para un escritorio liviano con i3, sin arrastrar GNOME ni KDE:
 
 ```
-emerge --ask sys-kernel/linux-firmware sys-firmware/intel-microcode
+sys-apps/portage
+app-admin/sudo
+app-shells/bash-completion
+net-misc/dhcpcd
+net-misc/netifrc
+sys-apps/mlocate
+app-admin/sysklogd
+sys-process/cronie
+net-misc/chrony
+sys-boot/grub
+app-portage/gentoolkit
+app-misc/screen
+
+# escritorio
+x11-base/xorg-server
+x11-wm/i3
+x11-terms/kitty
+x11-misc/dmenu
+x11-misc/picom
+media-fonts/dejavu
+media-fonts/noto
 ```
 
-Con `USE=initramfs` en esos paquetes y dracut configurado, el microcódigo se carga al
-inicio. Sin eso, las mitigaciones de la CPU no se aplican hasta tarde.
+Todo lo demás se agrega cuando se necesite.
 
-## Riesgos concretos
+## Checklist antes de formatear
 
-- **Particionar el disco equivocado** es el error más caro. Antes de `cfdisk`, confirmar
-  con `lsblk` y comparar tamaños y modelos.
-- **Reemplazar la distro actual** implica reinstalar todo lo que hoy usás: contenedores,
-  configuraciones, claves.
-- **Un kernel sin el driver de disco** se detecta tarde: el sistema bootea y muere con
-  `unable to mount root fs`.
-- **Backup sin probar** no es backup.
+1. **Backup de CachyOS**: lo que haya en el NVMe que no esté en otro lado. Los otros discos
+   de datos no se tocan, pero conviene tener el backup igual.
+2. **USB con la ISO** de Gentoo (minimal o LiveGUI), verificada con GPG.
+3. **Confirmar el modo de arranque**: UEFI, Secure Boot desactivado en el firmware.
+4. **Anotar los UUID** de los discos de datos si se van a montar en el `fstab`.
+5. **Tener otra máquina o el celular** para leer el handbook durante la instalación.
+6. Saber que `nvme0n1p1` es la partición EFI actual y que se puede reutilizar (4 GB, vfat)
+   o reformatear.
 
-## Estrategia recomendada
+## Orden de instalación en este equipo
 
-1. Terminar y validar la instalación en la VM.
-2. Practicar una segunda vez en una VM limpia, siguiendo la guía sin improvisar.
-3. Recién entonces, con backup verificado, instalar en hardware real.
-4. Si se puede, en un disco distinto del que tiene los datos, con el disco original
-   desconectado durante la instalación.
+1. Arrancar del USB en UEFI.
+2. Particionar `nvme0n1`: EFI 1G, swap 8G, root resto (ext4).
+3. Stage3, `make.conf` con `-march=native`, chroot.
+4. Perfil `default/linux/amd64/23.0` (multilib, sin escritorio al principio).
+5. Kernel manual con los `CONFIG_*` de arriba, o `gentoo-sources` + `localmodconfig`.
+6. `grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=Gentoo`.
+7. Primer arranque, red, usuario, i3.
+
+## Riesgos
+
+- **Elegir mal el disco** en `cfdisk` es el error más caro. Confirmar con `lsblk` antes.
+- **UEFI con la partición EFI mal montada**: `grub-install` falla o el sistema no aparece en
+  el menú del firmware.
+- **Sin `CONFIG_BLK_DEV_NVME`**: el kernel no ve el disco y muere con `unable to mount root fs`.
+- **Sin `amdgpu`**: consola a 640x480 y sin aceleración.
+- **No es reversible** sin backup: el NVMe pierde CachyOS.
