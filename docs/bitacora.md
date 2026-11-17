@@ -18,6 +18,7 @@ Qué aprendí:
 
 ## Entradas
 
+
 ## 2026-11-15 — Preparación del host
 
 Qué hice:
@@ -359,40 +360,6 @@ Qué aprendí:
 antes de entrar. Por eso `cp --dereference /etc/resolv.conf` quedó duplicado: el flag `-L`
 ya lo había resuelto.
 
-## 2026-11-16 — Kernel compilado y primer arranque
-
-Qué hice:
-Compilé el kernel a mano, instalé los módulos y el bootloader.
-
-Comandos:
-```
-make -j6
-make modules_install
-make install
-grub-install /dev/vda
-```
-
-Verificación:
-```
-/boot/vmlinuz-6.18.63-gentoo          20 MB
-/boot/initramfs-6.18.63-gentoo.img    9.6 MB
-/boot/System.map-6.18.63-gentoo       12 MB
-menuentry 'Gentoo GNU/Linux' ... 6.18.63-gentoo
-```
-
-Qué falló:
-- El primer `make` corrió sin `-j`: 18 minutos, 1167 objetos y load average 1.00 con seis
-  hilos disponibles. Se cortó y se relanzó con `make -j6`, que retomó desde donde estaba.
-- `sudo virsh snapshot-create-as` ejecutado **dentro** de la VM: `virsh: command not found`.
-  `virsh` es del host; el snapshot se hace desde afuera.
-- `grub-install /dev/vda2` y `grub-install /boot/` fallaron: el primero por blocklists, los
-  otros dos porque un directorio no es un dispositivo.
-
-Qué aprendí:
-`make install` con `installkernel` en `USE="dracut grub"` genera el initramfs y corre
-`grub-mkconfig` solo. Lo único manual es `grub-install` en el disco.
-Y un `make` sin `-j` en un kernel se nota: 1167 objetos en 18 minutos es un proceso por vez.
-
 ## 2026-11-15 — repos.conf y primer sync
 
 Qué hice:
@@ -494,3 +461,144 @@ Qué aprendí:
 aceptada, aunque lo pidas explícitamente. El `-*` al principio borra lo que trae el perfil
 y deja ver qué se acepta de verdad. Y las licencias se pueden exceptuar por paquete en
 `/etc/portage/package.license` sin aflojar la regla global.
+
+## 2026-11-16 — Primer arranque
+
+Qué hice:
+El sistema booteó con el kernel compilado y quedó accesible por SSH.
+
+Qué falló:
+- `net.eth0 failed to start: interface eth0 does not exist`. La interfaz real es `enp1s0`
+  (nombres predecibles); el enlace `net.eth0` no servía.
+- La consola se quedaba en `login:` sin aceptar texto, y aparecía
+  `INIT: Id "s1" respawning too fast: disabled for 5 minutes`: un getty de consola serie
+  fallando en bucle.
+- SSH rechazaba la conexión con `The account is locked due to 3 failed logins`. No era
+  SSH sino `pam_faillock`: tres intentos fallidos bloquean la cuenta ocho minutos.
+
+Cómo lo resolví:
+```
+cd /etc/init.d
+ln -s net.lo net.enp1s0
+rc-update add net.enp1s0 default
+rc-update del net.eth0 default
+/etc/init.d/net.enp1s0 start
+```
+Y el desbloqueo de la cuenta:
+```
+faillock --user ldgnu --reset
+```
+
+Verificación:
+```
+$ ip -br addr
+enp1s0  UP  192.168.122.35/24
+$ ping -c 2 gentoo.org
+2 packets transmitted, 2 received
+$ rc-update show default
+ chronyd | default
+ cronie  | default
+ net.enp1s0 | default
+ sshd    | default
+ sysklogd | default
+```
+
+Qué aprendí:
+- Los nombres predecibles obligan a que el script de netifrc se llame igual que la interfaz.
+  `net.eth0` es la convención vieja.
+- `pam_faillock` viene activo por defecto en Gentoo y bloquea la cuenta, no la IP.
+- Tener `dhcpcd` y `net.enp1s0` en el mismo runlevel deja dos clientes DHCP peleando por la
+  misma interfaz. `netifrc` ya invoca su propio cliente.
+
+## 2026-11-16 — Versión del kernel
+
+Qué hice:
+Comparé la versión compilada contra la disponible en el árbol.
+
+Verificación:
+```
+$ ls /var/db/repos/gentoo/sys-kernel/gentoo-sources/
+gentoo-sources-6.1.192.ebuild
+gentoo-sources-6.6.162.ebuild
+gentoo-sources-6.12.117.ebuild
+gentoo-sources-6.18.63.ebuild
+gentoo-sources-7.3.4.ebuild
+```
+
+Decisión: quedarse en 6.18.63 por ahora.
+Motivo: es la última de su serie. Actualizar a 7.3.4 implica `make oldconfig`, recompilar y
+volver a probar el arranque; conviene hacerlo después del primer `@world` y con el snapshot
+del disco ya tomado.
+
+## 2026-11-16 — Primer @world y herramientas de Portage
+
+Qué hice:
+Sincronicé el árbol, instalé gentoolkit y screen, y corrí el primer update completo.
+
+Comandos:
+```
+sudo emerge --sync
+sudo emerge --ask app-portage/gentoolkit
+sudo emerge --ask app-misc/screen
+sudo emerge --update --deep --newuse @world
+```
+
+Qué falló:
+- `emerge --newest-use` y `--new-use`: la bandera correcta es `--newuse`. Las otras dos no
+  existen y emerge tira el usage entero.
+- `eclean-dist` como usuario: `Permission denied: you must be root or belong to the portage
+  group`. Va con sudo.
+- `screen -S world` desde kitty: `Cannot find terminfo entry for 'xterm-kitty'`. Se resuelve
+  con `TERM=xterm-256color screen -S world` o entrando con `kitty +kitten ssh`.
+- `emerge app-misc/screen` sin categoría: `short ebuild name "screen" is ambiguous`. Hay que
+  dar el nombre completo.
+
+Verificación:
+```
+$ gcc-config -l
+  [1] x86_64-pc-linux-gnu-16 *
+$ ls -d /var/db/pkg/sys-libs/glibc-*
+/var/db/pkg/sys-libs/glibc-2.43-r4
+```
+
+El primer `@world` fueron 18 paquetes, con `sys-devel/gcc` y `sys-libs/glibc` entre ellos.
+
+Qué aprendí:
+Actualizar gcc y glibc juntos es la operación más delicada del sistema: si se corta en el
+medio, quedás sin compilador o sin libc utilizable. Se hace dentro de `screen` o `tmux`, no
+en una sesión SSH suelta. Después hay que revisar `gcc-config -l` para confirmar qué versión
+quedó seleccionada.
+
+## 2026-11-16 — Kernel compilado y primer arranque
+
+Qué hice:
+Compilé el kernel a mano, instalé los módulos y el bootloader.
+
+Comandos:
+```
+make -j6
+make modules_install
+make install
+grub-install /dev/vda
+```
+
+Verificación:
+```
+/boot/vmlinuz-6.18.63-gentoo          20 MB
+/boot/initramfs-6.18.63-gentoo.img    9.6 MB
+/boot/System.map-6.18.63-gentoo       12 MB
+menuentry 'Gentoo GNU/Linux' ... 6.18.63-gentoo
+```
+
+Qué falló:
+- El primer `make` corrió sin `-j`: 18 minutos, 1167 objetos y load average 1.00 con seis
+  hilos disponibles. Se cortó y se relanzó con `make -j6`, que retomó desde donde estaba.
+- `sudo virsh snapshot-create-as` ejecutado **dentro** de la VM: `virsh: command not found`.
+  `virsh` es del host; el snapshot se hace desde afuera.
+- `grub-install /dev/vda2` y `grub-install /boot/` fallaron: el primero por blocklists, los
+  otros dos porque un directorio no es un dispositivo.
+
+Qué aprendí:
+`make install` con `installkernel` en `USE="dracut grub"` genera el initramfs y corre
+`grub-mkconfig` solo. Lo único manual es `grub-install` en el disco.
+Y un `make` sin `-j` en un kernel se nota: 1167 objetos en 18 minutos es un proceso por vez.

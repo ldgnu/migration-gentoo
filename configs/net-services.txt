@@ -1,0 +1,3 @@
+/etc/init.d/net.enp1s0
+/etc/init.d/net.eth0
+/etc/init.d/net.lo
