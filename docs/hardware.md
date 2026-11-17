@@ -266,7 +266,73 @@ Todo lo demás se agrega cuando se necesite.
 6. `grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=Gentoo`.
 7. Primer arranque, red, usuario, i3.
 
+## Particionado recomendado
+
+Disco: `nvme0n1`, 476 GiB, UEFI, sin cifrado. Tabla GPT.
+
+| # | Tamaño | Tipo | Filesystem | Punto de montaje |
+|---|---|---|---|---|
+| p1 | 1 GiB | EFI System (EF00) | vfat | `/efi` |
+| p2 | 16 GiB | Linux swap (8200) | swap | — |
+| p3 | resto (~455 GiB) | Linux filesystem (8300) | ext4 | `/` |
+
+**Por qué la ESP de 1 GiB.** Con 512 MiB alcanza para GRUB, pero los kernels y los
+initramfs crecen, y si algún día querés guardar más de uno te quedás corto. 1 GiB es barato.
+
+**Por qué swap de 16 GiB.** Si querés hibernar (suspender a disco), el swap tiene que ser
+igual o mayor que la RAM: 15 GiB en tu caso. Si no te interesa hibernar, con 8 GiB sobra, y
+podés usar `zram` como swap comprimido en RAM, que es lo que ya usa CachyOS.
+
+**Por qué ext4 y no btrfs.** Para un servidor o un escritorio que se quiere estable, ext4 es
+predecible y no necesita subvolúmenes ni mantenimiento. Si querés snapshots y compresión,
+btrfs con `compress=zstd` es la otra opción razonable; en ese caso conviene separar
+subvolúmenes (`@`, `@home`, `@var`, `@snapshots`).
+
+**Sin `/boot` separado.** El kernel y el initramfs van en `/boot` dentro de la raíz, y GRUB
+los lee con el driver ext4 compilado en `core.img`. Funciona y ahorra una partición. Si
+preferís el esquema clásico, agregá una de 1 GiB ext4 para `/boot` y montá la ESP en `/efi`.
+
+### Comandos
+
+```
+parted -s /dev/nvme0n1 mklabel gpt
+parted -s /dev/nvme0n1 mkpart ESP fat32 1MiB 1025MiB
+parted -s /dev/nvme0n1 set 1 esp on
+parted -s /dev/nvme0n1 mkpart swap linux-swap 1025MiB 17409MiB
+parted -s /dev/nvme0n1 mkpart root ext4 17409MiB 100%
+```
+
+Y después:
+
+```
+mkfs.vfat -F 32 -n EFI /dev/nvme0n1p1
+mkswap -L swap /dev/nvme0n1p2
+mkfs.ext4 -L root /dev/nvme0n1p3
+```
+
+**Antes de escribir la tabla, confirmá tres veces el dispositivo.** `lsblk` muestra modelos y
+tamaños; el NVMe es el de 476 GB y el que tiene CachyOS. Los otros tres discos tienen datos y
+Windows.
+
+### Montaje
+
+```
+mount /dev/nvme0n1p3 /mnt/gentoo
+mkdir -p /mnt/gentoo/efi
+mount /dev/nvme0n1p1 /mnt/gentoo/efi
+swapon /dev/nvme0n1p2
+```
+
+Y el `fstab` correspondiente:
+
+```
+LABEL=root   /      ext4   defaults,noatime   0 1
+LABEL=EFI    /efi   vfat   umask=0077         0 2
+LABEL=swap   none   swap   sw                 0 0
+```
+
 ## Riesgos
+
 
 - **Elegir mal el disco** en `cfdisk` es el error más caro. Confirmar con `lsblk` antes.
 - **UEFI con la partición EFI mal montada**: `grub-install` falla o el sistema no aparece en
