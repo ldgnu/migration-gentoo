@@ -1,72 +1,129 @@
 # Índice de la instalación
 
-Checklist del recorrido completo. Marcado lo hecho en la VM, con el enlace al capítulo del
-handbook y a la sección de `vm.md` donde está el detalle.
+Mapa de todo el recorrido. **La guía ejecutable es [`guia-instalacion.md`](guia-instalacion.md)**:
+se sigue de arriba abajo y no hace falta abrir el handbook.
+
+Acá está el checklist para ir marcando lo que se hizo en el fierro. La instalación de la VM
+(`vm.md`) queda abajo como registro histórico: ya está completa y no se repite.
 
 ## Antes de arrancar
 
-- [ ] Backup de lo que haya que conservar
+- [ ] Backup de lo que esté en el NVMe (y de los volúmenes Docker, si hay)
 - [ ] ISO de Gentoo descargada y verificada con GPG
-- [ ] Modo de arranque confirmado (UEFI o BIOS)
-- [ ] Otro dispositivo para leer el handbook durante la instalación
+- [ ] UEFI confirmado, Secure Boot desactivado
+- [ ] Otro dispositivo para leer la guía durante la instalación
+- [ ] `lsblk` confirmado: destino = `nvme0n1` (476 GB)
 
-## Instalación base (VM)
+## Instalación en el fierro (i5-10400F / RX 6600)
 
-| # | Paso | Hecho | Handbook |
-|---|---|---|---|
-| 1 | Preparar el host: qemu, libvirt, red default | [x] | — |
-| 2 | Verificar la ISO con OpenPGP | [x] | [Signatures](https://www.gentoo.org/downloads/signatures/) |
-| 3 | Crear la VM | [x] | — |
-| 4 | Levantar sshd en el live y conectarse | [x] | [Networking](https://wiki.gentoo.org/wiki/Handbook:AMD64/Installation/Networking/es) |
-| 5 | Particionar el disco | [x] | [Disks](https://wiki.gentoo.org/wiki/Handbook:AMD64/Installation/Disks/es) |
-| 6 | Formatear y montar | [x] | [Disks](https://wiki.gentoo.org/wiki/Handbook:AMD64/Installation/Disks/es) |
-| 7 | Descargar y verificar el stage3 | [x] | [Stage](https://wiki.gentoo.org/wiki/Handbook:AMD64/Installation/Stage/es) |
-| 8 | Extraer el stage3 | [x] | [Stage](https://wiki.gentoo.org/wiki/Handbook:AMD64/Installation/Stage/es) |
-| 9 | Configurar `make.conf` | [x] | [Stage](https://wiki.gentoo.org/wiki/Handbook:AMD64/Installation/Stage/es) |
-| 10 | Copiar `resolv.conf` y entrar al chroot | [x] | [Base](https://wiki.gentoo.org/wiki/Handbook:AMD64/Installation/Base/es) |
-| 11 | Configurar `repos.conf` y sincronizar | [x] | [Base](https://wiki.gentoo.org/wiki/Handbook:AMD64/Installation/Base/es) |
-| 12 | Elegir el perfil | [x] | [Base](https://wiki.gentoo.org/wiki/Handbook:AMD64/Installation/Base/es) |
-| 13 | Actualizar `@world` | [x] | [Base](https://wiki.gentoo.org/wiki/Handbook:AMD64/Installation/Base/es) |
-| 14 | Configurar locales | [x] | [System](https://wiki.gentoo.org/wiki/Handbook:AMD64/Installation/System/es) |
-| 15 | Escribir `/etc/fstab` | [x] | [System](https://wiki.gentoo.org/wiki/Handbook:AMD64/Installation/System/es) |
-| 16 | Hostname y contraseña de root | [x] | [System](https://wiki.gentoo.org/wiki/Handbook:AMD64/Installation/System/es) |
-| 17 | Instalar fuentes del kernel | [x] | [Kernel](https://wiki.gentoo.org/wiki/Handbook:AMD64/Installation/Kernel/es) |
-| 18 | Configurar el kernel (`nconfig`) | [x] | [Kernel](https://wiki.gentoo.org/wiki/Handbook:AMD64/Installation/Kernel/es) |
-| 19 | Compilar e instalar el kernel | [x] | [Kernel](https://wiki.gentoo.org/wiki/Handbook:AMD64/Installation/Kernel/es) |
-| 20 | Instalar GRUB | [x] | [Bootloader](https://wiki.gentoo.org/wiki/Handbook:AMD64/Installation/Bootloader/es) |
-| 21 | Primer arranque | [x] | [Finalizing](https://wiki.gentoo.org/wiki/Handbook:AMD64/Installation/Finalizing/es) |
+**§0-1 · Rescate y verificación del disco** — [Disks](https://wiki.gentoo.org/wiki/Handbook:AMD64/Installation/Disks/es)
 
-## Posterior al arranque
+| # | Paso | Hecho |
+|---|---|---|
+| 1 | Rescate: `/proc/config.gz`, tailscale state, `lspci -nnk`, `lsusb`, `/etc` | [ ] |
+| 2 | Live arrancado en UEFI; disco visible en `nvme list` y `lsblk` | [ ] |
+| 3 | `smartctl` sin errores de integridad ni porcentaje de uso crítico | [ ] |
 
-| # | Paso | Hecho | Detalle |
-|---|---|---|---|
-| 22 | Configurar `net.enp1s0` | [x] | `vm.md` §14 |
-| 23 | Desbloquear la cuenta (`pam_faillock`) | [x] | `bitacora.md` |
-| 24 | Habilitar `sshd`, `sysklogd`, `cronie`, `chronyd` | [x] | `vm.md` §15 |
-| 25 | Sincronizar el árbol e instalar `gentoolkit` | [x] | `bitacora.md` |
-| 26 | Primer `@world` (gcc, glibc) | [x] | `bitacora.md` |
-| 27 | Limpiar distfiles (`eclean-dist -d`) | [ ] | [Portage tools](https://wiki.gentoo.org/wiki/Handbook:AMD64/Portage/Tools/es) |
-| 28 | `emerge --depclean` | [ ] | [Portage](https://wiki.gentoo.org/wiki/Handbook:AMD64/Working/Portage/es) |
-| 29 | `eselect news read` | [ ] | [News](https://wiki.gentoo.org/wiki/Project:News) |
-| 30 | Actualizar el kernel a 7.x (opcional) | [ ] | [Kernel upgrade](https://wiki.gentoo.org/wiki/Kernel/Upgrade/es) |
+**§2 · Discos**
 
-## Instalación en hardware real
+| # | Paso | Hecho |
+|---|---|---|
+| 4 | GPT + p1 EFI 1 GiB / p2 swap 16 GiB / p3 root resto | [ ] |
+| 5 | `mkfs.vfat`, `mkswap`, `mkfs.ext4` sin `Warning!` ni I/O error | [ ] |
+| 6 | Montaje en `/mnt/gentoo` + `/efi` + `swapon` | [ ] |
 
-| # | Paso | Hecho | Detalle |
-|---|---|---|---|
-| 31 | Relevar el hardware | [x] | `hardware.md` |
-| 32 | Backup del NVMe | [ ] | `hardware.md` |
-| 33 | USB con la ISO | [ ] | `hardware.md` |
-| 34 | Particionar con UEFI (ESP + swap + root) | [ ] | `hardware.md` |
-| 35 | Stage3 y `make.conf` con `-march=native` | [ ] | `hardware.md` |
-| 36 | Kernel con los drivers exactos | [ ] | `hardware.md` |
-| 37 | GRUB con `--target=x86_64-efi` | [ ] | `hardware.md` |
-| 38 | Escritorio: Xorg, i3, kitty, dmenu | [ ] | `hardware.md` |
-| 39 | Bluetooth + audio (JBL) | [ ] | `audio.md` |
+**§3-4 · Stage3 y base** — [Stage](https://wiki.gentoo.org/wiki/Handbook:AMD64/Installation/Stage/es) · [Base](https://wiki.gentoo.org/wiki/Handbook:AMD64/Installation/Base/es)
+
+| # | Paso | Hecho |
+|---|---|---|
+| 7 | Stage3 **openrc + multilib** verificado con sha512 y extraído | [ ] |
+| 8 | `make.conf`: `-march=native`, `MAKEOPTS="-j8 -l12"`, mirrors | [ ] |
+| 9 | `resolv.conf`, mounts, `chroot` | [ ] |
+| 10 | `emerge-webrsync` / `emerge --sync` | [ ] |
+| 11 | Perfil `default/linux/amd64/23.0` (multilib) | [ ] |
+| 12 | `@world` actualizado | [ ] |
+| 13 | USE: CPU flags, `VIDEO_CARDS amdgpu radeonsi`, `INPUT_DEVICES libinput`, grub efi-64, pipewire | [ ] |
+| 14 | `locale-gen` + `eselect locale` | [ ] |
+
+**§5 · Kernel** — [Kernel](https://wiki.gentoo.org/wiki/Handbook:AMD64/Installation/Kernel/es)
+
+| # | Paso | Hecho |
+|---|---|---|
+| 15 | `gentoo-sources` + **`linux-firmware`** + `dracut` + `installkernel` | [ ] |
+| 16 | `.config` desde `/proc/config.gz` del sistema viejo + `make olddefconfig` | [ ] |
+| 17 | Verificados los 26 símbolos críticos (`amdgpu=m`, codecs HDA, e1000e, vfat, nvme, ext4) | [ ] |
+| 18 | `make -j8 && make modules_install && make install` | [ ] |
+| 19 | `initramfs` generado en `/boot` | [ ] |
+
+**§6-7 · Sistema y arranque** — [System](https://wiki.gentoo.org/wiki/Handbook:AMD64/Installation/System/es) · [Bootloader](https://wiki.gentoo.org/wiki/Handbook:AMD64/Installation/Bootloader/es)
+
+| # | Paso | Hecho |
+|---|---|---|
+| 20 | `fstab` con `LABEL=root` / `LABEL=EFI` / `LABEL=swap` | [ ] |
+| 21 | hostname `qwertoo` + `/etc/hosts` | [ ] |
+| 22 | `net.enp1s0` en el runlevel default | [ ] |
+| 23 | `sysklogd`, `cronie`, `chronyd`, `sshd` | [ ] |
+| 24 | root + usuario `javi` en `wheel,audio,video,input` + sudoers | [ ] |
+| 25 | `grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=Gentoo` | [ ] |
+| 26 | `grub-mkconfig` + `efibootmgr -v` lista Gentoo | [ ] |
+
+**§8-11 · Primer arranque y escritorio**
+
+| # | Paso | Hecho |
+|---|---|---|
+| 27 | Bootea desde el disco, red arriba | [ ] |
+| 28 | `dmesg` sin `failed to load` (firmware amdgpu/BT) | [ ] |
+| 29 | Xorg + `xorg-drivers` + `xf86-input-libinput` + i3/kitty/dmenu/picom | [ ] |
+| 30 | `xrandr` con el modo nativo · `glxinfo` = RX 6600 | [ ] |
+| 31 | PipeWire + WirePlumber + BlueZ (`pactl info` = "on PipeWire") | [ ] |
+| 32 | `bluetooth` en default, `blueman`, `rtkit`, usuario en grupo `pipewire` | [ ] |
+| 33 | `aplay -l` lista placa Intel y HDMI | [ ] |
+| 34 | `eclean-dist -d`, `--depclean`, `eselect news read` | [ ] |
+
+## Mantenimiento
+
+- [ ] `eclean-dist -d` periódico
+- [ ] `emerge --ask --depclean` después de cada `--newuse @world`
+- [ ] `eselect news read all` antes de actualizar
+- [ ] `eclean-kernel -n 2` para limpiar kernels viejos
+
+## Registro histórico: instalación base en la VM
+
+Ya completa. Se conserva como evidencia de lo que se ejecutó en el laboratorio
+(BIOS + virtio + `no-multilib`). Detalle en `vm.md`.
+
+| # | Paso | Hecho |
+|---|---|---|
+| 1 | Preparar el host: qemu, libvirt, red default | [x] |
+| 2 | Verificar la ISO con OpenPGP | [x] |
+| 3 | Crear la VM | [x] |
+| 4 | Levantar sshd en el live y conectarse | [x] |
+| 5 | Particionar el disco | [x] |
+| 6 | Formatear y montar | [x] |
+| 7 | Descargar y verificar el stage3 | [x] |
+| 8 | Extraer el stage3 | [x] |
+| 9 | Configurar `make.conf` | [x] |
+| 10 | Copiar `resolv.conf` y entrar al chroot | [x] |
+| 11 | Configurar `repos.conf` y sincronizar | [x] |
+| 12 | Elegir el perfil | [x] |
+| 13 | Actualizar `@world` | [x] |
+| 14 | Configurar locales | [x] |
+| 15 | Escribir `/etc/fstab` | [x] |
+| 16 | Hostname y contraseña de root | [x] |
+| 17 | Instalar fuentes del kernel | [x] |
+| 18 | Configurar el kernel (`nconfig`) | [x] |
+| 19 | Compilar e instalar el kernel | [x] |
+| 20 | Instalar GRUB | [x] |
+| 21 | Primer arranque | [x] |
+| 22 | Configurar `net.enp1s0` | [x] |
+| 23 | Desbloquear la cuenta (`pam_faillock`) | [x] |
+| 24 | Habilitar `sshd`, `sysklogd`, `cronie`, `chronyd` | [x] |
+| 25 | Sincronizar el árbol e instalar `gentoolkit` | [x] |
+| 26 | Primer `@world` (gcc, glibc) | [x] |
 
 ## Documentación de referencia
 
-- [Handbook completo (español)](https://wiki.gentoo.org/wiki/Handbook:AMD64/es)
+- [Handbook completo (español)](https://wiki.gentoo.org/wiki/Handbook:AMD64/es) — copia local en `~/docs/gentoo-handbook/`
 - [Portage](https://wiki.gentoo.org/wiki/Portage)
 - [USE flags](https://wiki.gentoo.org/wiki/USE_flag)
 - [Kernel](https://wiki.gentoo.org/wiki/Kernel/es)

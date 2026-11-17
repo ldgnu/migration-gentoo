@@ -1,0 +1,2 @@
+# UEFI de 64 bits. El USE flag reemplaza a GRUB_PLATFORMS (deprecado).
+sys-boot/grub grub_platforms_efi-64

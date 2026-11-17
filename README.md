@@ -29,33 +29,38 @@ anda", sino un registro verificable de decisiones, errores y resoluciones.
 ## Estructura
 
 ```
-README.md          este archivo
-docs/indice.md     checklist de todo el recorrido, con links al handbook
-docs/vm.md         instalación paso a paso en una máquina virtual
-docs/hardware.md   instalación en la PC real: hardware, drivers, UEFI, paquetes
-docs/migracion.md  qué hacer con los 493 paquetes de CachyOS
-docs/audio.md      PipeWire, WirePlumber, Bluetooth y codecs A2DP
-docs/decisiones.md cada bifurcación y el motivo de la elección
-docs/bitacora.md   fecha, qué se rompió, cómo se resolvió
-docs/conceptos.md  explicaciones con analogías
-docs/retomar.md    cómo volver al chroot después de apagar (etapa de instalación)
-docs/img/          capturas de pantalla
-configs/           portage, make.conf, kernels, servicios
-scripts/           bootstrap, post-instalación y sync de configs
+README.md                 este archivo
+docs/guia-instalacion.md  ★ LA GUÍA: paso a paso completo, de arriba abajo, sin handbook
+docs/indice.md            checklist y mapa de todo el recorrido
+docs/hardware.md          hardware real, drivers, UEFI, rutas del menú del kernel
+docs/audio.md             PipeWire, WirePlumber, Bluetooth y codecs A2DP
+docs/vm.md                la instalación de práctica en una VM (laboratorio)
+docs/migracion.md         qué hacer con los 493 paquetes de CachyOS
+docs/decisiones.md        cada bifurcación y el motivo de la elección
+docs/bitacora.md          fecha, qué se rompió, cómo se resolvió
+docs/conceptos.md         explicaciones con analogías
+docs/retomar.md           cómo volver al chroot después de apagar
+docs/prompt-asistente.md  prompt autocontenido para asistencia desde el celular
+docs/img/                 capturas de pantalla
+configs/                  portage, make.conf, kernels, servicios
+scripts/                  bootstrap, post-instalación y sync de configs
 ```
 
-**Empezá por `docs/indice.md`**: tiene el checklist completo, marcado lo que ya está hecho
-y lo que falta, con el enlace al capítulo del handbook en cada paso.
+**Empezá por `docs/guia-instalacion.md`.** Es la guía única y en orden: rescate, live,
+particionado, stage3, kernel, GRUB, escritorio, audio y verificación final. `docs/indice.md`
+tiene el checklist para ir marcando.
 
-## Las dos guías
+## La guía
 
-- **`docs/vm.md`** — el recorrido completo que se hizo en una VM con libvirt: del host vacío
-  al sistema que bootea. Es la que se ejecutó y se documentó con errores reales.
-- **`docs/hardware.md`** — qué cambia para instalar en la PC física: inventario de hardware,
-  drivers obligatorios con su ruta en el menú del kernel, UEFI sin Secure Boot, qué conviene
-  compilar y qué bajar como binario.
+- **`docs/guia-instalacion.md`** — el paso a paso completo para el fierro. Cada bloque se
+  ejecuta y se verifica; incluye los valores exactos de `make.conf`, `package.use` y del
+  kernel, y la tabla de errores ya resueltos.
+- **`docs/hardware.md`** — referencia: qué driver necesita cada componente y dónde está en
+  el menú del kernel.
+- **`docs/vm.md`** — el recorrido que se hizo en la VM. Es historia y evidencia, no el camino
+  a seguir en el fierro (la VM es BIOS + virtio; el fierro es UEFI + amdgpu).
 
-La VM es el laboratorio. El hardware es el destino.
+Cada paso de la guía linkea, cuando hace falta profundidad, al capítulo del handbook.
 
 
 ## Capturas

@@ -1,0 +1,5 @@
+# OJO: media-video/pipewire NO tiene flag "pulseaudio" (emerge corta con
+# "USE flag 'pulseaudio' is not in IUSE"). La emulación viene de pipewire-alsa
+# y del paquete media-libs/libpulse.
+media-video/pipewire sound-server pipewire-alsa bluetooth dbus extra lv2
+media-video/wireplumber bluetooth

@@ -56,19 +56,21 @@ media-libs/gst-plugins-*    # si alguna app usa GStreamer
 En `make.conf`, global:
 
 ```
-USE="pulseaudio bluetooth dbus"
+USE="bluetooth dbus elogind X wayland"
 ```
 
 En `package.use`, para PipeWire:
 
 ```
-media-video/pipewire sound-server bluetooth dbus pulseaudio pipewire-alsa extra gstreamer lv2
+media-video/pipewire sound-server pipewire-alsa bluetooth dbus extra lv2
 media-video/wireplumber bluetooth
 ```
 
 - `sound-server` es el flag clave: sin eso PipeWire no funciona como servidor de audio.
-- `pulseaudio` en PipeWire instala la emulación de PulseAudio, que es lo que usan casi todas
-  las aplicaciones.
+- `pipewire-alsa` instala el plugin ALSA que da la emulación que usan casi todas las
+  aplicaciones. **`pulseaudio` no es un flag de pipewire**: escribirlo corta el emerge con
+  `USE flag 'pulseaudio' is not in IUSE` (`media-libs/libpulse` es el paquete que aporta la
+  compatibilidad).
 - `bluetooth` habilita el soporte de dispositivos Bluetooth en PipeWire.
 - `lv2` permite cargar plugins LV2 en el grafo, útil si hacés música.
 
