@@ -73,6 +73,57 @@ CONFIG_BT=m
 CONFIG_BT_HCIBTUSB=m
 ```
 
+## Audio Bluetooth (auriculares JBL)
+
+Los auriculares **no tienen driver propio**. Lo que se configura es esto:
+
+- **El adaptador** (TP-Link USB, `2357:0604`): driver `btusb`, que es kernel.
+- **El stack Bluetooth**: kernel + BlueZ en userspace.
+- **El audio**: PipeWire o PulseAudio con soporte A2DP. No es kernel.
+
+En el kernel, `Networking support → Bluetooth subsystem support → Bluetooth device drivers →
+HCI USB driver`.
+
+En userspace:
+
+```
+net-wireless/bluez
+media-video/pipewire[bluetooth]
+media-libs/libfreeaptx      # códecs A2DP, opcional
+```
+
+Y el servicio `bluetooth` en el runlevel default. Con eso aparecen los JBL en `bluetoothctl`.
+
+Si no carga `btusb`, el adaptador no existe para el sistema y no hay forma de conectar nada.
+
+## Rutas del menú del kernel
+
+Todo lo de arriba, ubicado donde se toca. `make nconfig` o `menuconfig`:
+
+| Qué | Ruta |
+|---|---|
+| EFI | `Processor type and features → EFI runtime service support` |
+| Consola EFI | `Device Drivers → Graphics support → EFI framebuffer` |
+| NVMe | `Device Drivers → NVME Support` |
+| SATA/AHCI | `Device Drivers → Serial ATA and Parallel ATA drivers → AHCI SATA support` |
+| Red Intel | `Device Drivers → Network device support → Ethernet driver support → Intel devices → Intel PRO/1000 PCI-Express` |
+| GPU AMD | `Device Drivers → Graphics support → AMD GPU` |
+| Audio HDA | `Device Drivers → Sound card support → Advanced Linux Sound Architecture → HD-Audio → HD Audio PCI` |
+| Audio USB | `Device Drivers → Sound card support → ALSA → USB sound devices` |
+| USB xHCI | `Device Drivers → USB support → xHCI HCD` |
+| HID | `Device Drivers → HID support → USB HID support` + `Generic HID driver` |
+| Bluetooth | `Networking support → Bluetooth subsystem support → HCI USB driver` |
+| ext4 | `File systems → Ext4` |
+| vfat | `File systems → DOS/FAT/EXFAT/NTFS → VFAT` |
+| exFAT | `File systems → DOS/FAT/EXFAT/NTFS → EXFAT` |
+| NTFS | `File systems → DOS/FAT/EXFAT/NTFS → NTFS3` |
+
+Atajo para no pelear con 3000 opciones: `make localmodconfig` desde el live. Toma los módulos
+que el kernel del live tiene cargados y deja seleccionado exactamente lo que esta máquina
+necesita. Después se revisa con `nconfig` y se fija en `=y` lo que va en el disco y en el
+filesystem.
+
+
 ## Periféricos conectados hoy
 
 | Dispositivo | ID | Módulo |

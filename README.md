@@ -30,16 +30,27 @@ anda", sino un registro verificable de decisiones, errores y resoluciones.
 
 ```
 README.md          este archivo
-docs/guia.md       recorrido paso a paso de la instalación
-docs/bare-metal.md qué cambia al instalar en hardware real
+docs/vm.md         instalación paso a paso en una máquina virtual
+docs/hardware.md   instalación en la PC real: hardware, drivers, UEFI, paquetes
 docs/decisiones.md cada bifurcación y el motivo de la elección
 docs/bitacora.md   fecha, qué se rompió, cómo se resolvió
 docs/conceptos.md  explicaciones con analogías
-docs/retomar.md    cómo volver al chroot después de apagar
+docs/retomar.md    cómo volver al chroot después de apagar (etapa de instalación)
 docs/img/          capturas de pantalla
 configs/           portage, make.conf, kernels, servicios
 scripts/           bootstrap, post-instalación y sync de configs
 ```
+
+## Las dos guías
+
+- **`docs/vm.md`** — el recorrido completo que se hizo en una VM con libvirt: del host vacío
+  al sistema que bootea. Es la que se ejecutó y se documentó con errores reales.
+- **`docs/hardware.md`** — qué cambia para instalar en la PC física: inventario de hardware,
+  drivers obligatorios con su ruta en el menú del kernel, UEFI sin Secure Boot, qué conviene
+  compilar y qué bajar como binario.
+
+La VM es el laboratorio. El hardware es el destino.
+
 
 ## Capturas
 
