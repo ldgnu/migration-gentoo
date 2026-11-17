@@ -62,7 +62,7 @@ handbook y a la sección de `vm.md` donde está el detalle.
 | 36 | Kernel con los drivers exactos | [ ] | `hardware.md` |
 | 37 | GRUB con `--target=x86_64-efi` | [ ] | `hardware.md` |
 | 38 | Escritorio: Xorg, i3, kitty, dmenu | [ ] | `hardware.md` |
-| 39 | Bluetooth + audio (JBL) | [ ] | `hardware.md` |
+| 39 | Bluetooth + audio (JBL) | [ ] | `audio.md` |
 
 ## Documentación de referencia
 

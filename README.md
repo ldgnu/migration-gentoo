@@ -34,6 +34,7 @@ docs/indice.md     checklist de todo el recorrido, con links al handbook
 docs/vm.md         instalación paso a paso en una máquina virtual
 docs/hardware.md   instalación en la PC real: hardware, drivers, UEFI, paquetes
 docs/migracion.md  qué hacer con los 493 paquetes de CachyOS
+docs/audio.md      PipeWire, WirePlumber, Bluetooth y codecs A2DP
 docs/decisiones.md cada bifurcación y el motivo de la elección
 docs/bitacora.md   fecha, qué se rompió, cómo se resolvió
 docs/conceptos.md  explicaciones con analogías
