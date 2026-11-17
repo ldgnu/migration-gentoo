@@ -137,7 +137,59 @@ filesystem.
 Todos son USB HID o audio USB: con `USB_HID`, `HID_GENERIC` y `SND_USB_AUDIO` alcanza.
 No hay wifi en esta máquina.
 
+## Parámetros de compilación para esta máquina
+
+CPU: 6 núcleos, 12 hilos. RAM: 15 GiB (con el sistema andando quedan ~8 libres).
+
+El límite no es la CPU, es la **memoria**. Cada trabajo de compilación puede pedir entre
+300 MB y 2 GB, y los paquetes grandes (llvm, clang, rust, webkit) piden lo máximo. Doce
+trabajos en 15 GB es la receta del OOM killer.
+
+```
+COMMON_FLAGS="-march=native -O2 -pipe"
+CFLAGS="${COMMON_FLAGS}"
+CXXFLAGS="${COMMON_FLAGS}"
+FCFLAGS="${COMMON_FLAGS}"
+FFLAGS="${COMMON_FLAGS}"
+
+MAKEOPTS="-j8 -l12"
+EMERGE_DEFAULT_OPTS="--jobs=3 --load-average=12"
+```
+
+Por qué cada cosa:
+
+- `-j8`: ocho compilaciones en paralelo dentro de un paquete. Con 12 hilos deja margen, y
+  con ~8 GB libres entra sin matar procesos en la mayoría de los paquetes.
+- `-l12`: si la carga del sistema pasa de 12, no arranca más trabajos. Frena el pico.
+- `--jobs=3`: hasta tres paquetes distintos a la vez (no confundir con `-j`, que es dentro de
+  uno). Multiplica el consumo: tres paquetes con `-j8` son 24 procesos en el peor caso.
+- `--load-average=12`: techo global. Si se pasa, Portage espera.
+
+**Si vas a usar la máquina mientras compila**, bajá a `-j6 --jobs=2`. La diferencia en tiempo
+total es chica; la diferencia en que el escritorio siga respondiendo es grande.
+
+**ccache** ayuda bastante con recompilaciones repetidas (cambiar una USE flag y volver):
+
+```
+emerge --ask dev-build/ccache
+```
+
+```
+FEATURES="${FEATURES} ccache"
+CCACHE_SIZE="10G"
+```
+
+No acelera la primera compilación, pero las siguientes son mucho más rápidas.
+
+**Lo que no conviene:**
+
+- `-j12`: en 15 GB, el primer `llvm` o `rust` te mata el proceso.
+- `-O3` global: rompe paquetes y casi nunca gana lo que promete.
+- `-flto` global: algunos ebuilds no lo soportan y fallan de formas raras.
+- `distcc`: no tiene otra máquina que ayude.
+
 ## Qué compilar y qué no
+
 
 La idea de "rendimiento a full" se logra con `-march=native` y USE flags ajustados, no con
 compilar todo. Un binario oficial compilado con `-O2` y x86-64-v3 rinde prácticamente igual
