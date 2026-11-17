@@ -1,0 +1,513 @@
+# Mapeo de paquetes Arch (CachyOS) a Gentoo
+# Generado consultando packages.gentoo.org. 'exacto' = mismo nombre base.
+# 'similar' = la búsqueda encontró algo parecido, hay que verificarlo a mano.
+# 'NO EXISTE' = no hay paquete con ese nombre ni parecido.
+#
+# LIMITACION: el buscador web devuelve resultados parciales y tiene rate limit.
+# Varios 'NO EXISTE' son falsos negativos: el paquete puede existir con otra
+# categoria o estar en el overlay guru. La fuente de verdad es el arbol local:
+#   emerge --search nombre
+#   qsearch nombre
+# Se valida contra /var/db/repos/gentoo cuando la maquina esta disponible.
+# Generado consultando packages.gentoo.org. 'exacto' = mismo nombre base.
+# 'similar' = la búsqueda encontró algo parecido, hay que verificarlo a mano.
+# 'NO EXISTE' = no hay paquete con ese nombre ni parecido.
+
+=== EXACTOS ===
+accountsservice|sys-apps/accountsservice
+alsa-firmware|sys-firmware/alsa-firmware
+alsa-plugins|media-plugins/alsa-plugins
+alsa-utils|media-sound/alsa-utils
+amdgpu_top|sys-apps/amdgpu_top
+amsynth|media-sound/amsynth
+amule|net-p2p/amule
+android-tools|dev-util/android-tools
+arandr|x11-misc/arandr
+aria2|net-misc/aria2
+bandwhich|net-analyzer/bandwhich
+base|dev-ml/base
+bash-completion|app-shells/bash-completion
+bind|net-dns/bind
+blueman|net-wireless/blueman
+bluez|net-wireless/bluez
+bottom|sys-process/bottom
+breeze-icons|kde-frameworks/breeze-icons
+broot|app-misc/broot
+btop|sys-process/btop
+btrfs-assistant|app-admin/btrfs-assistant
+btrfs-progs|sys-fs/btrfs-progs
+calf|media-plugins/calf
+catfish|dev-util/catfish
+cava|media-sound/cava
+chafa|media-gfx/chafa
+cmake|dev-build/cmake
+cmatrix|app-misc/cmatrix
+copyq|x11-misc/copyq
+cpupower|sys-power/cpupower
+cpu-x|sys-apps/cpu-x
+cronie|sys-process/cronie
+cryptsetup|sys-fs/cryptsetup
+cups|net-print/cups
+diffutils|sys-apps/diffutils
+discord|net-im/discord
+dmidecode|sys-apps/dmidecode
+dmraid|sys-fs/dmraid
+dnsmasq|net-dns/dnsmasq
+docker-compose|app-containers/docker-compose
+docker|x11-plugins/docker
+dog|sys-apps/dog
+dosfstools|sys-fs/dosfstools
+duf|sys-fs/duf
+dunst|x11-misc/dunst
+dust|sys-block/dust
+e2fsprogs|sys-fs/e2fsprogs
+efibootmgr|sys-boot/efibootmgr
+efitools|app-crypt/efitools
+ethtool|sys-apps/ethtool
+evtest|app-misc/evtest
+exfatprogs|sys-fs/exfatprogs
+f2fs-tools|sys-fs/f2fs-tools
+fastfetch|app-misc/fastfetch
+feh|media-gfx/feh
+ffmpegthumbnailer|media-video/ffmpegthumbnailer
+ffmpegthumbs|kde-apps/ffmpegthumbs
+filezilla|net-ftp/filezilla
+flatpak|sys-apps/flatpak
+fsarchiver|app-backup/fsarchiver
+fwupd|sys-apps/fwupd
+gamemode|games-util/gamemode
+git-delta|dev-util/git-delta
+git|dev-ruby/git
+git-filter-repo|dev-vcs/git-filter-repo
+github-cli|dev-util/github-cli
+glances|sys-process/glances
+gnome-keyring|gnome-base/gnome-keyring
+go|dev-lang/go
+google-chrome|www-client/google-chrome
+gparted|sys-block/gparted
+greetd|gui-libs/greetd
+grim|gui-apps/grim
+gst-plugins-bad|media-libs/gst-plugins-bad
+gst-plugins-good|media-libs/gst-plugins-good
+gst-plugins-ugly|media-libs/gst-plugins-ugly
+guitarix|media-sound/guitarix
+hdparm|sys-apps/hdparm
+htop|sys-process/htop
+hwinfo|sys-apps/hwinfo
+hyperfine|app-benchmarks/hyperfine
+i3lock|x11-misc/i3lock
+i3status|x11-misc/i3status
+inetutils|net-misc/inetutils
+inotify-tools|sys-fs/inotify-tools
+iptables|net-firewall/iptables
+iwd|net-wireless/iwd
+jfsutils|sys-fs/jfsutils
+just|dev-build/just
+kanshi|gui-apps/kanshi
+kcalc|kde-apps/kcalc
+kdialog|kde-apps/kdialog
+kio-admin|app-admin/kio-admin
+kitty|x11-terms/kitty
+krita|media-gfx/krita
+kubectl|sys-cluster/kubectl
+less|sys-apps/less
+libdvdcss|media-libs/libdvdcss
+libgsf|gnome-extra/libgsf
+libopenraw|media-libs/libopenraw
+libva-utils|media-video/libva-utils
+libvirt|app-emulation/libvirt
+limine|sys-boot/limine
+linux-firmware|sys-kernel/linux-firmware
+logrotate|app-admin/logrotate
+lolcat|games-misc/lolcat
+lsb-release|sys-apps/lsb-release
+lsd|sys-apps/lsd
+lsp-plugins|media-libs/lsp-plugins
+lsscsi|sys-fs/lsscsi
+lvm2|sys-fs/lvm2
+maim|media-gfx/maim
+mako|gui-apps/mako
+man-db|sys-apps/man-db
+man-pages|sys-apps/man-pages
+mdadm|sys-fs/mdadm
+meld|dev-util/meld
+micro|app-editors/micro
+minikube|sys-cluster/minikube
+mixxx|media-sound/mixxx
+modemmanager|net-misc/modemmanager
+mosh|net-misc/mosh
+mpv|media-video/mpv
+mtools|sys-fs/mtools
+musescore|media-sound/musescore
+nano|app-editors/nano
+ncdu|sys-fs/ncdu
+ncpamixer|media-sound/ncpamixer
+neovim|app-editors/neovim
+networkmanager|net-misc/networkmanager
+networkmanager-openvpn|net-vpn/networkmanager-openvpn
+newsboat|net-news/newsboat
+nfs-utils|net-fs/nfs-utils
+nginx|www-servers/nginx
+nicotine+|net-p2p/nicotine+
+nilfs-utils|sys-fs/nilfs-utils
+nmap|net-analyzer/nmap
+noise-repellent|media-plugins/noise-repellent
+nss-mdns|sys-auth/nss-mdns
+nvtop|sys-process/nvtop
+ollama|sci-ml/ollama
+openssh|net-misc/openssh
+os-prober|sys-boot/os-prober
+papirus-icon-theme|x11-themes/papirus-icon-theme
+pavucontrol|media-sound/pavucontrol
+perl|dev-lang/perl
+picocom|net-dialup/picocom
+picom|x11-misc/picom
+playerctl|media-sound/playerctl
+plocate|sys-apps/plocate
+plymouth|sys-boot/plymouth
+polkit-gnome|gnome-extra/polkit-gnome
+power-profiles-daemon|sys-power/power-profiles-daemon
+procs|sys-process/procs
+pv|sys-apps/pv
+pwvucontrol|media-sound/pwvucontrol
+python|dev-lang/python
+qbittorrent|net-p2p/qbittorrent
+qt6ct|gui-apps/qt6ct
+qutebrowser|www-client/qutebrowser
+rdma-core|sys-cluster/rdma-core
+remmina|net-misc/remmina
+ripgrep|sys-apps/ripgrep
+rofi|x11-misc/rofi
+rsync|net-misc/rsync
+rustup|dev-util/rustup
+sc-controller|games-util/sc-controller
+sg3_utils|sys-apps/sg3_utils
+shelly|dev-haskell/shelly
+slop|x11-misc/slop
+smartmontools|sys-apps/smartmontools
+s-nail|mail-client/s-nail
+snapper|app-backup/snapper
+socat|net-misc/socat
+sof-firmware|sys-firmware/sof-firmware
+spectacle|kde-plasma/spectacle
+speedtest-cli|net-analyzer/speedtest-cli
+spirv-headers|dev-util/spirv-headers
+sshpass|net-misc/sshpass
+strace|dev-debug/strace
+sudo|app-admin/sudo
+swappy|gui-apps/swappy
+swaybg|gui-apps/swaybg
+swayidle|gui-apps/swayidle
+swaylock|gui-apps/swaylock
+swtpm|app-crypt/swtpm
+sxhkd|x11-misc/sxhkd
+syncthing|net-p2p/syncthing
+sysfsutils|sys-fs/sysfsutils
+tailscale|net-vpn/tailscale
+telegram-desktop|net-im/telegram-desktop
+terminus-font|media-fonts/terminus-font
+terraform|app-admin/terraform
+testdisk|app-admin/testdisk
+texinfo|sys-apps/texinfo
+thunar-archive-plugin|xfce-extra/thunar-archive-plugin
+thunar-volman|xfce-base/thunar-volman
+thunar|xfce-base/thunar
+tmux|app-misc/tmux
+trippy|net-analyzer/trippy
+ttf-bitstream-vera|media-fonts/ttf-bitstream-vera
+tumbler|xfce-base/tumbler
+typescript|dev-lang/typescript
+ufw|net-firewall/ufw
+unrar|app-arch/unrar
+unzip|app-arch/unzip
+upower|sys-power/upower
+usb_modeswitch|sys-apps/usb_modeswitch
+usbutils|sys-apps/usbutils
+vdpauinfo|x11-misc/vdpauinfo
+vim|app-editors/vim
+virt-manager|app-emulation/virt-manager
+virt-viewer|app-emulation/virt-viewer
+volk|sci-libs/volk
+vulkan-headers|dev-util/vulkan-headers
+vulkan-utility-libraries|dev-util/vulkan-utility-libraries
+waybar|gui-apps/waybar
+wf-recorder|gui-apps/wf-recorder
+wget|net-misc/wget
+which|sys-apps/which
+wireplumber|media-video/wireplumber
+wl-clipboard|gui-apps/wl-clipboard
+wofi|gui-apps/wofi
+wpa_supplicant|net-wireless/wpa_supplicant
+xarchiver|app-arch/xarchiver
+xclip|app-emacs/xclip
+xdg-desktop-portal-wlr|gui-libs/xdg-desktop-portal-wlr
+xdg-user-dirs|x11-misc/xdg-user-dirs
+xdotool|x11-misc/xdotool
+xf86-video-amdgpu|x11-drivers/xf86-video-amdgpu
+xfce4-power-manager|xfce-base/xfce4-power-manager
+xfsprogs|sys-fs/xfsprogs
+xl2tpd|net-dialup/xl2tpd
+xorg-server|x11-base/xorg-server
+xsel|x11-misc/xsel
+xsettingsd|x11-misc/xsettingsd
+xss-lock|x11-misc/xss-lock
+yt-dlp|net-misc/yt-dlp
+zathura|app-text/zathura
+zathura-pdf-mupdf|app-text/zathura-pdf-mupdf
+zellij|app-misc/zellij
+zip|app-arch/zip
+zoxide|app-shells/zoxide
+zynaddsubfx|media-sound/zynaddsubfx
+
+=== SIMILARES (verificar) ===
+adlplug-lv2|similar: media-plugins/ams-lv2
+aida-x-lv2|similar: media-libs/lv2
+ambix-lv2|similar: media-plugins/ams-lv2
+amsynth-common|similar: media-sound/amsynth
+amsynth-dssi|similar: media-sound/amsynth
+amsynth-lv2|similar: media-sound/amsynth
+amsynth-standalone|similar: sys-libs/argp-standalone
+amsynth-vst|similar: media-sound/amsynth
+apple-music-bin|similar: sys-process/top-apple
+archlinux-wallpaper|similar: x11-misc/xwallpaper
+artyfx|similar: net-p2p/arti
+avldrums.lv2|similar: media-plugins/x42-avldrums
+awesome-terminal-fonts|similar: x11-terms/gnome-terminal
+balena-etcher-bin|similar: games-fps/etqw-bin
+barrier|similar: sys-apps/bar
+base-devel|similar: dev-ml/base
+blop.lv2|similar: media-libs/lv2
+bluetuith|similar: net-wireless/bluetui
+bluez-hid2hci|similar: net-wireless/bluez
+bluez-libs|similar: net-wireless/bluez
+bluez-obex|similar: net-wireless/bluez
+bluez-utils|similar: dev-perl/B-Utils
+browsh|similar: dev-gap/browse
+bshapr|similar: dev-java/bsh
+bun|similar: dev-ruby/bunny
+cachyos-fish-config|similar: gui-libs/wf-config
+cachyos-gaming-applications|similar: dev-perl/CGI-Application
+cachyos-hello|similar: app-misc/hello
+cachyos-hooks|similar: dev-perl/Role-Hooks
+cachyos-keyring|similar: dev-python/keyring
+cachyos-micro-settings|similar: xfce-base/xfce4-settings
+cachyos-packageinstaller|similar: dev-perl/Package-Constants
+cachyos-plymouth-bootanimation|similar: sys-boot/plymouth
+cachyos-plymouth-theme|similar: sys-boot/plymouth
+cachyos-settings|similar: xfce-base/xfce4-settings
+cachyos-snapper-support|similar: app-xemacs/c-support
+cachyos-wallpapers|similar: x11-themes/ubuntu-wallpapers
+cachyos-zsh-config|similar: gui-libs/wf-config
+cachy-update|similar: app-portage/cfg-update
+cantarell-fonts|similar: media-fonts/cantarell
+cardinal-lv2|similar: media-libs/lv2
+carla|similar: media-fonts/cardo
+catppuccin-gtk-theme-mocha|similar: x11-themes/e-gtk-theme
+char-white|similar: sys-cluster/charm
+chawan|similar: media-gfx/chafa
+choose|similar: dev-perl/Clone-Choose
+climat|similar: dev-ruby/climate_control
+cliphist|similar: x11-plugins/wmcliphist
+cli-zapp|similar: dev-perl/App-CLI
+code|similar: sci-libs/cgcode
+coolercontrol|similar: dev-haskell/monad-control
+deskreen|similar: app-emacs/desktop+
+device-mapper|similar: dev-java/java-service-wrapper
+dexed|similar: x11-misc/dex
+dpf-plugins-lv2|similar: media-plugins/gst-plugins-lv2
+dragonfly-reverb-lv2|similar: media-plugins/dragonfly-reverb-plugins
+drumkv1-lv2|similar: media-libs/lv2
+dsearch-bin|similar: sci-astronomy/ds9-bin
+dux-shell|similar: dev-perl/Shell
+edk2-ovmf|similar: sys-firmware/edk2
+eduke32-bin|similar: games-fps/eduke32
+electron42|similar: sci-electronics/electric
+eteroj.lv2|similar: media-libs/lv2
+fabla|similar: dev-dotnet/fable
+fomp.lv2|similar: media-libs/lv2
+fuzzel|similar: dev-util/fuzz
+geonkick-lv2|similar: media-libs/lv2
+ggml-hip|similar: sci-ml/ggml
+gmsynth.lv2|similar: media-plugins/gmsynth-lv2
+gpick|similar: sys-apps/pick
+greetd-tuigreet|similar: gui-apps/tuigreet
+grex|similar: sys-apps/grep
+gst-libav|similar: media-plugins/gst-plugins-libav
+gst-plugin-pipewire|similar: media-plugins/gst-plugin-gtk4
+gst-plugin-va|similar: media-plugins/gst-plugin-gtk4
+gxplugins.lv2|similar: media-plugins/gst-plugins-lv2
+hwdetect|similar: app-cdr/cddetect
+hyprlock|similar: sci-libs/hypre
+i3-wm|similar: x11-wm/i3
+intel-ucode|similar: sys-firmware/intel-microcode
+inter-font|similar: dev-perl/Test-Inter
+jc303-lv2|similar: media-libs/lv2
+jdownloader2|similar: games-util/lgogdownloader
+jellyfin-media-player|similar: app-misc/media-player-info
+jless|similar: sys-apps/less
+joplin|similar: app-emacs/joplin-mode
+kdegraphics-thumbnailers|similar: kde-apps/kdesdk-thumbnailers
+keyd|similar: app-crypt/ekeyd
+kvantum-theme-catppuccin-git|similar: x11-themes/kvantum
+legendary|similar: games-fps/legends
+lib32-mesa|similar: media-libs/mesa
+lib32-opencl-mesa|similar: dev-libs/opencl-clang
+lib32-vulkan-radeon|similar: media-libs/vulkan-loader
+libvdpau-va-gl|similar: x11-libs/libvdpau
+limine-mkinitcpio-hook|similar: sys-boot/limine
+limine-snapper-sync|similar: app-backup/snapper
+linux-cachyos-headers|similar: sys-kernel/linux-headers
+linux-cachyos-lts-headers|similar: sys-kernel/linux-headers
+linux-cachyos-server-lto-headers|similar: sys-kernel/linux-headers
+linux-cachyos-server-lto|similar: sec-policy/selinux-xserver
+linux-cachyos|similar: dev-perl/Linux-Pid
+liquidsfz-lv2|similar: dev-ruby/liquid
+llama-cpp|similar: app-emacs/llama
+lsp-plugins-lv2|similar: media-libs/lsp-plugins
+lv2-example-plugins|similar: media-plugins/gst-plugins-lv2
+lv2file|similar: dev-python/lhafile
+master_me-lv2|similar: media-plugins/mda-lv2
+matugen|similar: dev-util/maturin
+mda.lv2|similar: media-plugins/mda-lv2
+mephisto.lv2|similar: media-plugins/mda-lv2
+mesa-demos|similar: media-libs/mesa
+mesa-utils|similar: dev-gap/utils
+midi_matrix.lv2|similar: app-vim/matrix
+minitone-bin|similar: dev-java/mill-bin
+moony.lv2|similar: media-libs/lv2
+nano-syntax-highlighting|similar: kde-frameworks/syntax-highlighting
+nchat|similar: net-im/neochat
+nerd-fonts-sf-mono|similar: media-fonts/symbols-nerd-font
+netctl|similar: sci-libs/netcdf
+network-manager-applet|similar: net-misc/networkmanager
+noto-fonts-cjk|similar: media-fonts/noto-cjk
+noto-fonts-emoji|similar: media-fonts/noto-emoji
+noto-fonts|similar: media-fonts/fs-fonts
+ntfs-3g|similar: sys-fs/ntfs3g
+obsidian|similar: x11-themes/obsidian-xcursors
+ob-xf-lv2|similar: media-libs/lv2
+ollama-rocm|similar: sci-ml/ollama
+opencl-mesa|similar: media-libs/mesa
+opnplug-lv2|similar: media-libs/lv2
+otf-apple-sf-pro|similar: sys-process/top-apple
+ouch|similar: kde-apps/ktouch
+pacman-contrib|similar: app-emacs/org-contrib
+padthv1-lv2|similar: media-libs/lv2
+pamixer|similar: media-sound/pamix
+paru|similar: dev-perl/PAR
+patchmatrix|similar: sys-devel/patch
+phonon-qt6-vlc|similar: dev-python/python-vlc
+pipewire-alsa|similar: media-video/pipewire
+pipewire-jack|similar: media-video/pipewire
+pipewire-pulse|similar: media-video/pipewire
+pkgfile|similar: dev-python/pefile
+poppler-glib|similar: app-text/poppler
+prism-download-manager-bin|similar: kde-plasma/print-manager
+python-defusedxml|similar: dev-python/defusedxml
+python-packaging|similar: dev-python/packaging
+python-pip|similar: dev-lang/python
+python-pipx|similar: dev-lang/python
+qemu-desktop|similar: app-emacs/desktop+
+qmidiarp-lv2|similar: media-sound/qmidiarp
+qt5ct|similar: dev-qt/qt5compat
+raze-bin|similar: www-apps/radarr-bin
+reaper|similar: media-sound/reaper-bin
+rebuild-detector|similar: dev-go/go-license-detector
+reflector|similar: dev-haskell/reflection
+river|similar: games-action/rive
+rpm-tools|similar: app-crypt/tpm-tools
+rubberband-lv2|similar: media-libs/rubberband
+rustdesk-bin|similar: dev-lang/rust-bin
+samplv1-lv2|similar: media-plugins/swh-lv2
+sddm-sugar-candy-git|similar: net-vpn/candy
+sdl2-compat|similar: app-emacs/compat
+sdl2_mixer|similar: media-libs/sdl2-mixer
+setbfree-lv2|similar: media-plugins/swh-lv2
+sfizz-lv2|similar: media-libs/lv2
+sfizz|similar: dev-cpp/fizz
+sg-323-lv2|similar: media-libs/lv2
+sherlock.lv2|similar: media-plugins/swh-lv2
+sorcer|similar: dev-libs/sord
+stremio|similar: dev-ruby/stream
+sunshine-beta-bin|similar: net-misc/sunshine
+surge-xt|similar: games-roguelike/scourge
+swayfx|similar: gui-wm/sway
+swaync|similar: gui-wm/sway
+synthv1-lv2|similar: media-plugins/gmsynth-lv2
+terax-bin|similar: net-im/gitter-bin
+termix-bin|similar: gnustep-apps/terminal
+tokei|similar: sci-ml/tokenizers
+ttf-dejavu|similar: media-fonts/dejavu
+ttf-jetbrains-mono-nerd|similar: media-fonts/jetbrains-mono
+ttf-liberation|similar: media-fonts/liberation-fonts
+ttf-opensans|similar: media-fonts/open-sans
+ufw-extras|similar: dev-python/extras
+ventoy-bin|similar: dev-java/maven-bin
+virt-install|similar: dev-perl/Sub-Install
+vlc-plugins-all|similar: media-plugins/alsa-plugins
+vm.lv2|similar: media-libs/lv2
+vulkan-extra-layers|similar: media-libs/vulkan-layers
+vulkan-extra-tools|similar: dev-util/vulkan-tools
+vulkan-html-docs|similar: dev-util/vulkan-headers
+vulkan-profiles|similar: media-libs/amdgpu-pro-vulkan
+vulkan-radeon|similar: media-libs/vulkan-loader
+vulkan-validation-layers|similar: media-libs/vulkan-layers
+whisper.cpp|similar: dev-python/whisper
+whitesur-cursor-theme-git|similar: x11-themes/xcursor-themes
+whitesur-gtk-theme|similar: x11-themes/e-gtk-theme
+whitesur-icon-theme|similar: x11-themes/arc-icon-theme
+wlr-randr|similar: dev-haskell/random
+woeusb|similar: sys-boot/woeusb-ng
+wolf-spectrum|similar: net-im/spectrum2
+wtype|similar: dev-haskell/newtype-generics
+x42-plugins-lv2|similar: media-plugins/x42-plugins
+xkb-switch|similar: dev-perl/Switch
+xmonk.lv2|similar: media-libs/lv2
+xorg-xev|similar: x11-apps/xev
+xorg-xinit|similar: x11-apps/xinit
+xorg-xset|similar: x11-apps/xset
+xorg-xwayland|similar: x11-base/xwayland
+yabridge|similar: net-misc/ubridge
+yay|similar: dev-libs/yaz
+yazi|similar: dev-libs/yaz
+yoshimi-lv2|similar: media-sound/yoshimi
+zam-plugins-lv2|similar: media-plugins/zam-plugins
+zen-browser-bin|similar: media-tv/tvbrowser-bin
+
+=== NO EXISTE ===
+autotiling|NO EXISTE
+bchoppr|NO EXISTE
+brightnessctl|NO EXISTE
+bsequencer|NO EXISTE
+bslizr|NO EXISTE
+cachyos-gaming-meta|NO EXISTE
+cachyos-kernel-manager|NO EXISTE
+cachyos-mirrorlist|NO EXISTE
+cachyos-rate-mirrors|NO EXISTE
+cachyos-v3-mirrorlist|NO EXISTE
+cachyos-v4-mirrorlist|NO EXISTE
+chwd|NO EXISTE
+decent-sampler-bin|NO EXISTE
+distrho-ports-lv2|NO EXISTE
+drumgizmo-lv2|NO EXISTE
+elephantdsp-roomreverb-lv2|NO EXISTE
+eq10q|NO EXISTE
+infamousplugins|NO EXISTE
+lact|NO EXISTE
+lazygit|NO EXISTE
+linux-cachyos-lts|NO EXISTE
+mkinitcpio|NO EXISTE
+npm|NO EXISTE
+odin2-synthesizer-lv2|NO EXISTE
+otf-san-francisco-mono|NO EXISTE
+peazip-qt-bin|NO EXISTE
+pnpm|NO EXISTE
+spectmorph-lv2|NO EXISTE
+ttf-meslo-nerd|NO EXISTE
+ultramaster-kr106-lv2|NO EXISTE
+vaporizer2-lv2|NO EXISTE
+variety|NO EXISTE
+wlsunset|NO EXISTE
+wolf-shaper-lv2|NO EXISTE
+yabridgectl|NO EXISTE
+zapzap|NO EXISTE
