@@ -30,6 +30,7 @@ anda", sino un registro verificable de decisiones, errores y resoluciones.
 
 ```
 README.md          este archivo
+docs/indice.md     checklist de todo el recorrido, con links al handbook
 docs/vm.md         instalación paso a paso en una máquina virtual
 docs/hardware.md   instalación en la PC real: hardware, drivers, UEFI, paquetes
 docs/decisiones.md cada bifurcación y el motivo de la elección
@@ -40,6 +41,9 @@ docs/img/          capturas de pantalla
 configs/           portage, make.conf, kernels, servicios
 scripts/           bootstrap, post-instalación y sync de configs
 ```
+
+**Empezá por `docs/indice.md`**: tiene el checklist completo, marcado lo que ya está hecho
+y lo que falta, con el enlace al capítulo del handbook en cada paso.
 
 ## Las dos guías
 
