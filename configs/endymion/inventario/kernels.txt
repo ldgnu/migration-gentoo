@@ -1,0 +1,3 @@
+Available kernel symlink targets:
+  [1]   linux-6.18.63-gentoo
+  [2]   linux-7.3.5-gentoo *

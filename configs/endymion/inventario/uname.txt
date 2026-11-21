@@ -1,0 +1,1 @@
+Linux endymion 7.3.5-gentoo-gentoo-dist #2 SMP PREEMPT_DYNAMIC Thu Nov 19 23:52:16 -03 2026 x86_64 Intel(R) Core(TM) i5-10400F CPU @ 2.90GHz GenuineIntel GNU/Linux

@@ -1,0 +1,35 @@
+#!/bin/sh
+# Workaround: al arrancar, snd_hda_intel a veces no detecta los codecs
+# ("Cannot probe codecs, giving up"). Desde kernel 7.3.x el viejo truco de
+# remove + rescan PCI ya no reengancha el driver; rebindearlo (unbind/bind)
+# sí fuerza un reprobe limpio y las tarjetas vuelven a aparecer.
+
+DRV=/sys/bus/pci/drivers/snd_hda_intel
+
+rebind() {
+	dev=$1
+	name=$2
+	marker=$3
+
+	grep -q "$marker" /proc/asound/cards 2>/dev/null && return 0
+
+	i=1
+	while [ "$i" -le 3 ]; do
+		logger -t hda-reset "$name no detectada; rebindeando $dev (intento $i)"
+		[ -e "$DRV/$dev" ] && echo "$dev" > "$DRV/unbind" 2>/dev/null
+		sleep 1
+		[ -d "/sys/bus/pci/devices/$dev" ] && echo "$dev" > "$DRV/bind" 2>/dev/null
+		sleep 2
+
+		if grep -q "$marker" /proc/asound/cards 2>/dev/null; then
+			logger -t hda-reset "$name detectada correctamente"
+			return 0
+		fi
+		i=$((i + 1))
+	done
+
+	logger -t hda-reset "$name sigue sin detectarse tras 3 intentos"
+}
+
+rebind 0000:00:1f.3 PCH PCH
+rebind 0000:03:00.1 HDMI HDMI

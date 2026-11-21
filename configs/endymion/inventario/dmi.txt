@@ -1,0 +1,4 @@
+sys_vendor: ASUS
+product_name: System Product Name
+bios_version: 3005
+bios_date: 12/08/2025

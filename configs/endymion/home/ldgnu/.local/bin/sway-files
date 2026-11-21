@@ -1,0 +1,8 @@
+#!/bin/sh
+# sway-files: abre el gestor de archivos TUI disponible.
+if command -v yazi >/dev/null 2>&1; then
+    exec yazi "$@"
+elif command -v ranger >/dev/null 2>&1; then
+    exec ranger "$@"
+fi
+exec /home/ldgnu/.local/bin/tui-run ranger

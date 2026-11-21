@@ -1,0 +1,7 @@
+gui-wm/sway elogind gtk tray
+gui-libs/wlroots elogind
+sys-auth/seatd server
+# required by x11-libs/gtk+-3.24.52::gentoo
+# required by gui-apps/wofi-1.5::gentoo
+# required by wofi (argument)
+>=x11-libs/cairo-1.18.6 X

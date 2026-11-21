@@ -1,0 +1,14 @@
+NAME          SIZE FSTYPE LABEL UUID MOUNTPOINTS
+sda         465,8G                   
+└─sda1      465,8G                   /mnt/PirateGames
+sdb         931,5G                   
+└─sdb1      931,5G                   /mnt/PirateNW
+sdc         111,8G                   
+├─sdc1        260M                   
+├─sdc2        128M                   
+└─sdc3      111,4G                   
+nvme0n1     476,9G                   
+├─nvme0n1p1     1G                   /efi
+├─nvme0n1p2    16G                   [SWAP]
+├─nvme0n1p3   100G                   /
+└─nvme0n1p4 359,9G                   /home

@@ -1,0 +1,10 @@
+#!/bin/sh
+# sway-audio: mezclador TUI disponible (pulsemixer o ncpamixer).
+if command -v pulsemixer >/dev/null 2>&1; then
+    exec pulsemixer
+elif command -v ncpamixer >/dev/null 2>&1; then
+    exec ncpamixer
+elif command -v alsamixer >/dev/null 2>&1; then
+    exec alsamixer
+fi
+exec /home/ldgnu/.local/bin/tui-run pulsemixer

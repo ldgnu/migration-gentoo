@@ -1,0 +1,2 @@
+# generado por scripts/capturar-configs.sh
+2026-11-21T00:43:28-03:00

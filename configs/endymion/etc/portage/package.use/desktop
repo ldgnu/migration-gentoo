@@ -1,0 +1,4 @@
+# Escritorio Sway: apps y utilidades
+# cairo con X: lo pide gtk+-3 (portal GTK). Son libs cliente, no Xorg completo.
+x11-libs/cairo X
+media-libs/freetype harfbuzz

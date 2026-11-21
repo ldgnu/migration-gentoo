@@ -1,0 +1,17 @@
+#!/bin/sh
+# sway-power: menú de energía en wmenu, monocromo.
+op=$(printf '%s\n' \
+    'bloquear' \
+    'salir de sway' \
+    'suspender' \
+    'reiniciar' \
+    'apagar' \
+    | wmenu -p power -l 8)
+
+case "$op" in
+    bloquear)      exec swaylock -f -c 000000 ;;
+    'salir de sway') exec swaymsg exit ;;
+    suspender)     exec loginctl suspend ;;
+    reiniciar)     exec loginctl reboot ;;
+    apagar)        exec loginctl poweroff ;;
+esac

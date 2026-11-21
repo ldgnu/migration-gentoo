@@ -1,0 +1,5 @@
+#!/bin/sh
+for p in /sys/devices/system/cpu/cpufreq/policy*; do
+  echo performance > "$p/scaling_governor" 2>/dev/null
+  echo performance > "$p/energy_performance_preference" 2>/dev/null
+done

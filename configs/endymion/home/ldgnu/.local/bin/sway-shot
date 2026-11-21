@@ -1,0 +1,44 @@
+#!/bin/sh
+# sway-shot: capturas sin apps gráficas.
+#   sway-shot area     zona con slurp (default)
+#   sway-shot screen   monitor con foco, directo
+# Guarda en ~/Pictures/shots y copia al portapapeles.
+
+dir="$HOME/Pictures/shots"
+mkdir -p "$dir"
+file="$dir/$(date +%Y%m%d-%H%M%S).png"
+
+case "${1:-area}" in
+    screen)
+        out=$(swaymsg -t get_outputs -r | python3 -c '
+import json, sys
+try:
+    for o in json.load(sys.stdin):
+        if o.get("focused"):
+            print(o["name"]); break
+except Exception:
+    pass
+' 2>/dev/null)
+        [ -z "$out" ] && out=$(swaymsg -t get_outputs -r | python3 -c '
+import json, sys
+d=json.load(sys.stdin)
+print(next((o["name"] for o in d if o.get("active")), d[0]["name"]))
+' 2>/dev/null)
+        grim -o "$out" "$file" || exit 1
+        ;;
+    *)
+        geom=$(slurp) || exit 0
+        grim -g "$geom" "$file" || exit 1
+        ;;
+esac
+
+wl-copy < "$file" || true
+if command -v notify-send >/dev/null 2>&1; then
+    notify-send -a Captura "Captura guardada" "$(basename "$file")"
+fi
+printf 'Captura: %s\n' "$file"
+
+# Anotar/dibujar con swappy si está instalado. SWAY_SHOT_EDITOR=0 lo desactiva.
+if [ "${SWAY_SHOT_EDITOR:-1}" = 1 ] && command -v swappy >/dev/null 2>&1; then
+    setsid -f swappy -f "$file" >/dev/null 2>&1
+fi

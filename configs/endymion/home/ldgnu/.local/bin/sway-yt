@@ -1,0 +1,194 @@
+#!/bin/sh
+# sway-yt — manda una URL a mpv, con cola y minuto de inicio.
+#
+# Uso:
+#   sway-yt                 abre/reemplaza en el workspace 12
+#   sway-yt --fs            pantalla completa
+#   sway-yt --enqueue       agrega a la cola sin cortar lo que suena
+#   sway-yt --start 1830    arranca en el segundo 1830 (o 30:30)
+#   sway-yt --url URL       usa esa URL (no toca el portapapeles)
+#   sway-yt --list          muestra la cola actual
+#   sway-yt --dry-run       muestra la URL detectada
+#
+# La URL sale del portapapeles; si está vacía, la pide con wmenu.
+# Requiere: mpv, python3, wl-clipboard. Recomendado: yt-dlp, wmenu, jq.
+
+set -u
+
+WS="${MPV_WS:-12}"
+SOCK="${XDG_RUNTIME_DIR:-/tmp}/mpv-zen.sock"
+FMT="${MPV_FMT:-best[height<=1080]/best}"
+
+FS=0
+ENQUEUE=0
+LIST=0
+DRY=0
+START=""
+URL=""
+
+while [ $# -gt 0 ]; do
+    case "$1" in
+        --fs) FS=1 ;;
+        --enqueue|--add) ENQUEUE=1 ;;
+        --list) LIST=1 ;;
+        --dry-run) DRY=1 ;;
+        --start) START="${2:-}"; shift ;;
+        --url) URL="${2:-}"; shift ;;
+        -h|--help) sed -n '2,20p' "$0"; exit 0 ;;
+        *) echo "opción desconocida: $1" >&2; exit 2 ;;
+    esac
+    shift
+done
+
+note() {
+    command -v notify-send >/dev/null 2>&1 && \
+        notify-send -a "zen→mpv" "zen→mpv" "$1" 2>/dev/null
+    return 0
+}
+
+die() {
+    note "$1"
+    echo "sway-yt: $1" >&2
+    if command -v foot >/dev/null 2>&1 && [ -n "${WAYLAND_DISPLAY:-}" ]; then
+        foot -e sh -c 'printf "\n  %s\n\n  Enter para cerrar..." "$1"; read -r _' sh "$1"
+    fi
+    exit 1
+}
+
+# segundos a partir de "90", "30:30" o "1:02:03"
+to_seconds() {
+    python3 - "$1" <<'PY'
+import sys
+s = sys.argv[1].strip()
+if not s:
+    print(""); raise SystemExit
+parts = s.split(":")
+try:
+    parts = [float(p) for p in parts]
+except ValueError:
+    print(""); raise SystemExit
+sec = 0.0
+for p in parts:
+    sec = sec * 60 + p
+print(int(sec))
+PY
+}
+
+ipc() {
+    python3 - "$SOCK" "$1" <<'PY'
+import json, socket, sys
+sock, raw = sys.argv[1], sys.argv[2]
+s = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+s.settimeout(2)
+try:
+    s.connect(sock)
+except OSError:
+    raise SystemExit(1)
+s.sendall((raw + "\n").encode())
+buf = b""
+try:
+    while not buf.endswith(b"\n"):
+        chunk = s.recv(4096)
+        if not chunk:
+            break
+        buf += chunk
+except OSError:
+    pass
+sys.stdout.write(buf.decode(errors="replace").strip())
+PY
+}
+
+alive() {
+    [ -S "$SOCK" ] || return 1
+    ipc '{"command":["get_property","mpv-version"]}' 2>/dev/null \
+        | grep -q '"error":"success"'
+}
+
+if [ "$LIST" = 1 ]; then
+    if ! alive; then
+        echo "mpv no está corriendo." >&2
+        exit 1
+    fi
+    ipc '{"command":["get_property","playlist"]}' \
+        | python3 -c '
+import json, sys
+try:
+    d = json.load(sys.stdin).get("data") or []
+except Exception:
+    d = []
+if not d:
+    print("(cola vacía)")
+for i, e in enumerate(d, 1):
+    mark = "▶" if e.get("playing") else " "
+    print("%2d %s %s" % (i, mark, e.get("title") or e.get("filename") or "?"))
+'
+    exit 0
+fi
+
+if [ -z "$URL" ]; then
+    if command -v wl-paste >/dev/null 2>&1; then
+        URL=$(wl-paste --no-newline 2>/dev/null | tr -d '\r\n')
+    fi
+    if [ -z "$URL" ] && command -v wmenu >/dev/null 2>&1; then
+        URL=$(wmenu -p URL </dev/null 2>/dev/null | tr -d '\r\n')
+    fi
+fi
+
+URL=$(printf '%s' "$URL" | sed 's/^[[:space:]]*//; s/[[:space:]]*$//')
+case "$URL" in
+    http://*|https://*) ;;
+    *) die "No hay una URL http(s) en el portapapeles." ;;
+esac
+
+[ -n "$START" ] && START=$(to_seconds "$START")
+[ -n "$START" ] && [ "$START" = "0" ] && START=""
+
+printf 'sway-yt: %s%s%s\n' "$URL" \
+    "${START:+ (desde ${START}s)}" "${ENQUEUE:+ [cola]}"
+
+[ "$DRY" = 1 ] && exit 0
+
+command -v mpv >/dev/null 2>&1 || die "Falta mpv: emerge media-video/mpv"
+
+action="replace"
+[ "$ENQUEUE" = 1 ] && action="append-play"
+
+# Instancia viva: usar IPC.
+if alive; then
+    cmd=$(python3 - "$URL" "$action" "$START" <<'PY'
+import json, sys
+url, action, start = sys.argv[1], sys.argv[2], sys.argv[3]
+args = ["loadfile", url, action]
+if start:
+    args += [-1, {"start": float(start)}]
+print(json.dumps({"command": args}))
+PY
+)
+    if ipc "$cmd" | grep -q '"error":"success"'; then
+        if [ "$ENQUEUE" = 1 ]; then
+            note "En cola: $(printf '%s' "$URL" | sed 's|.*/||')"
+        else
+            swaymsg "workspace number $WS" >/dev/null 2>&1
+            if [ "$FS" = 1 ]; then
+                ipc '{"command":["set_property","fullscreen",true]}' >/dev/null 2>&1
+            fi
+            note "Reproduciendo en mpv"
+        fi
+        exit 0
+    fi
+    rm -f "$SOCK"
+fi
+
+# Sin instancia: lanzar mpv.
+set -- --no-terminal \
+    --force-window=yes \
+    --hwdec=auto-safe \
+    --ytdl-format="$FMT" \
+    --input-ipc-server="$SOCK" \
+    --msg-level=all=warn
+[ "$FS" = 1 ] && set -- "$@" --fullscreen
+[ -n "$START" ] && set -- "$@" --start="$START"
+
+swaymsg "workspace number $WS" >/dev/null 2>&1
+setsid -f mpv "$@" -- "$URL" >/dev/null 2>&1 || die "mpv no arrancó"
+note "mpv abierto en el workspace $WS"

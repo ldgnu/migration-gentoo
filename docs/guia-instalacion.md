@@ -142,10 +142,16 @@ tar xpvf stage3-amd64-openrc-<FECHA>.tar.xz --xattrs-include='*.*' --numeric-own
 rm stage3-amd64-openrc-<FECHA>.tar.xz*
 ```
 
-`make.conf` del repo (`configs/etc/portage/make.conf`) — copiar tal cual, es el que anda:
+Dos `make.conf` en el repo, y **no son lo mismo**:
+
+- `configs/endymion/etc/portage/make.conf` — el del equipo real: `-march=native`, `-j8`,
+  `VIDEO_CARDS="amdgpu radeonsi"`, `ABI_X86="64 32"`. Es el que sirve para un equipo
+  parecido.
+- `configs/etc/portage/make.conf` — el de la VM: `-march=skylake`, `-j6`, `virgl`. Queda como
+  registro histórico; en el fierro deja el sistema sin GPU.
 
 ```bash
-cp configs/etc/portage/make.conf /mnt/gentoo/etc/portage/make.conf   # si el repo está a mano
+cp configs/endymion/etc/portage/make.conf /mnt/gentoo/etc/portage/make.conf
 ```
 
 Si no, escribilo a mano:

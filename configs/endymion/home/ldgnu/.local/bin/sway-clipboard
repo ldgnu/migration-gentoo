@@ -1,0 +1,9 @@
+#!/bin/sh
+# sway-clipboard: historial de portapapeles con cliphist + wmenu.
+if ! command -v cliphist >/dev/null 2>&1; then
+    exec /home/ldgnu/.local/bin/tui-run cliphist
+fi
+
+sel=$(cliphist list | wmenu -p clipboard -l 15)
+[ -z "$sel" ] && exit 0
+printf '%s' "$sel" | cliphist decode | wl-copy

@@ -1,0 +1,4 @@
+# PipeWire como servidor de audio (OpenRC + elogind)
+media-video/pipewire sound-server pipewire-alsa bluetooth dbus
+media-video/wireplumber elogind
+media-libs/libpulse gtk

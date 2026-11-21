@@ -1,0 +1,14 @@
+#!/bin/sh
+# wmenu-run — wmenu estilizado como la barra de sway (swaybar).
+# Lista TODO lo que hay en $PATH; para apps del sistema usar wmenu-drun.
+# No toca la barra. Tamaño de fuente: WMENU_RUN_FONT (default 9).
+
+FONT="${WMENU_RUN_FONT:-DejaVu Sans Mono 9}"
+
+exec /usr/bin/wmenu-run \
+    -f "$FONT" \
+    -N '#000000' -n '#ffffff' \
+    -M '#000000' -m '#ffffff' \
+    -S '#ffffff' -s '#000000' \
+    -i \
+    "$@"

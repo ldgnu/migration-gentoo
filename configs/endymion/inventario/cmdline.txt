@@ -1,0 +1,1 @@
+BOOT_IMAGE=/boot/vmlinuz-7.3.5-gentoo-gentoo-dist root=UUID=f58fb93f-1681-423f-a6f2-ce6a6e8d9752 ro

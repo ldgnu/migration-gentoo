@@ -1,0 +1,13 @@
+#!/bin/sh
+# sway-wifi: gestor de red TUI. Usa nmtui (NetworkManager) o iwctl (iwd).
+if command -v nmtui >/dev/null 2>&1; then
+    exec nmtui
+elif command -v iwctl >/dev/null 2>&1; then
+    exec iwctl
+fi
+
+printf '\n  No hay gestor de red TUI instalado.\n\n'
+printf '  Opción liviana:  emerge net-wireless/iwd && rc-service iwd start\n'
+printf '  Opción NM:       emerge net-misc/networkmanager\n\n'
+printf '  Enter para cerrar...'
+read -r _

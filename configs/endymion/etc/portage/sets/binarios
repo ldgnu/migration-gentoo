@@ -1,0 +1,5 @@
+sys-devel/gcc
+sys-devel/clang
+dev-lang/rust
+www-client/firefox
+app-office/libreoffice

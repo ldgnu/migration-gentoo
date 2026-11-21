@@ -1,0 +1,361 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Sway — enfoque TUI, blanco y negro
+# Atajos heredados de la config vieja (CachyOS), apps reemplazadas por TUI.
+# Backup de la config anterior: config.bak-20261118
+# ─────────────────────────────────────────────────────────────────────────────
+
+set $mod Mod4
+set $alt Mod1
+set $term foot
+set $bin /home/ldgnu/.local/bin
+
+# ── Apariencia: monocromo, sin bordes redondeados ni gaps grandes ────────────
+font pango:DejaVu Sans Mono 10
+floating_modifier $mod normal
+default_border pixel 2
+default_floating_border pixel 2
+gaps inner 2
+gaps outer 2
+smart_gaps on
+smart_borders on
+
+client.focused          #ffffff #000000 #ffffff #ffffff #ffffff
+client.focused_inactive #555555 #000000 #dddddd #555555 #555555
+client.unfocused        #333333 #000000 #cccccc #333333 #333333
+client.urgent           #ffffff #000000 #ffffff #ffffff #ffffff
+client.placeholder      #555555 #000000 #dddddd #555555 #555555
+client.background       #000000
+
+output * bg #000000 solid_color
+
+# ── Monitores (tomado de la config vieja) ────────────────────────────────────
+# HDMI-A-1: Samsung LF27T35, horizontal, principal.
+# DP-2:     Hikvision, vertical (transform 270 = giro a la izquierda),
+#           a la derecha del principal. Si la imagen sale dada vuelta,
+#           cambiá 270 por 90.
+output HDMI-A-1 {
+    mode 1920x1080@74.973Hz
+    position 0 0
+    scale 1
+    transform normal
+}
+
+output DP-2 {
+    mode 1920x1080@100Hz
+    position 1920 0
+    scale 1
+    transform 270
+}
+
+# ── Teclado: latam con deadtilde (igual que antes) ───────────────────────────
+input type:keyboard {
+    xkb_layout latam
+    xkb_variant deadtilde
+    xkb_model pc105
+    repeat_delay 300
+    repeat_rate 40
+}
+
+input type:touchpad {
+    tap enabled
+    natural_scroll disabled
+}
+
+# ── Arranque de la sesión ────────────────────────────────────────────────────
+exec gentoo-pipewire-launcher
+exec mako
+exec wl-paste --watch cliphist store
+exec swayidle -w \
+    timeout 900 'swaylock -f -c 000000' \
+    timeout 905 'swaymsg "output * power off"' \
+    resume 'swaymsg "output * power on"' \
+    before-sleep 'swaylock -f -c 000000'
+
+# ── Workspaces: 1-10 en HDMI-A-1, 11-20 en DP-2 ──────────────────────────────
+workspace 1  output HDMI-A-1
+workspace 2  output HDMI-A-1
+workspace 3  output HDMI-A-1
+workspace 4  output HDMI-A-1
+workspace 5  output HDMI-A-1
+workspace 6  output HDMI-A-1
+workspace 7  output HDMI-A-1
+workspace 8  output HDMI-A-1
+workspace 9  output HDMI-A-1
+workspace 10 output HDMI-A-1
+workspace 11 output DP-2
+workspace 12 output DP-2
+workspace 13 output DP-2
+workspace 14 output DP-2
+workspace 15 output DP-2
+workspace 16 output DP-2
+workspace 17 output DP-2
+workspace 18 output DP-2
+workspace 19 output DP-2
+workspace 20 output DP-2
+
+# ── Terminal y apps TUI ──────────────────────────────────────────────────────
+bindsym $mod+Return      exec $term
+bindsym $mod+e           exec $term -e $bin/sway-files              # archivos (era nautilus)
+bindsym $mod+c           exec $bin/sway-clipboard                   # historial de portapapeles
+bindsym $mod+d           exec wmenu-drun                           # lanzador (apps .desktop)
+bindsym $mod+Shift+d     exec wmenu-run                            # ejecutar comando
+bindsym $mod+p           exec $term -e $bin/sway-audio              # audio TUI
+bindsym $mod+n           exec $term -e $bin/sway-wifi               # red (nmtui/iwctl)
+bindsym $mod+b           exec $term -c /home/ldgnu/.config/foot/bluetui.ini -w 900x620 -a bluetui -T bluetui -e bluetui  # bluetooth TUI
+bindsym $mod+m           exec $term -e python3 -q                   # calculadora (era gnome-calculator)
+bindsym $mod+y           exec $bin/sway-yt                          # URL del portapapeles → mpv
+bindsym $mod+Alt+y       exec $bin/sway-yt --fs                     # idem, pantalla completa
+bindsym $mod+Ctrl+y      exec $bin/sway-yt --enqueue                # agregar a la cola de mpv
+bindsym $mod+Shift+i     exec $term -e nvim /home/ldgnu/.config/sway/config
+bindsym $mod+Shift+n     exec $term -e $bin/sway-outputs            # info de monitores
+
+# ── Capturas (grim + slurp, sin apps gráficas) ───────────────────────────────
+bindsym Print            exec $bin/sway-shot area
+bindsym $mod+i           exec $bin/sway-shot area
+bindsym $mod+Ctrl+i      exec $bin/sway-shot screen
+
+# ── Notificaciones (mako) ────────────────────────────────────────────────────
+bindsym $mod+Shift+p     exec makoctl dismiss --all
+bindsym $mod+Shift+y     exec makoctl dismiss
+bindsym $mod+Shift+u     exec makoctl mode -t do-not-disturb
+
+# ── Energía y bloqueo ────────────────────────────────────────────────────────
+bindsym $mod+Escape      exec $bin/sway-power
+bindsym $mod+Ctrl+Escape exec swaylock -f -c 000000
+bindsym $mod+Shift+Escape exec $bin/sway-awake toggle
+
+# ── Foco y movimiento (vim keys) ─────────────────────────────────────────────
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+bindsym $mod+Left  focus left
+bindsym $mod+Down  focus down
+bindsym $mod+Up    focus up
+bindsym $mod+Right focus right
+
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
+bindsym $mod+Shift+Left  move left
+bindsym $mod+Shift+Down  move down
+bindsym $mod+Shift+Up    move up
+bindsym $mod+Shift+Right move right
+
+# ── Redimensionar ────────────────────────────────────────────────────────────
+bindsym $mod+Ctrl+h resize shrink width 10 px or 10 ppt
+bindsym $mod+Ctrl+j resize grow height 10 px or 10 ppt
+bindsym $mod+Ctrl+k resize shrink height 10 px or 10 ppt
+bindsym $mod+Ctrl+l resize grow width 10 px or 10 ppt
+
+mode "resize" {
+    bindsym h resize shrink width 10 px or 10 ppt
+    bindsym j resize grow height 10 px or 10 ppt
+    bindsym k resize shrink height 10 px or 10 ppt
+    bindsym l resize grow width 10 px or 10 ppt
+    bindsym Left  resize shrink width 10 px or 10 ppt
+    bindsym Down  resize grow height 10 px or 10 ppt
+    bindsym Up    resize shrink height 10 px or 10 ppt
+    bindsym Right resize grow width 10 px or 10 ppt
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+bindsym $mod+r mode "resize"
+
+# ── Layouts ──────────────────────────────────────────────────────────────────
+bindsym $mod+s layout stacking
+bindsym $mod+t layout tabbed
+bindsym $mod+v layout toggle split
+bindsym $mod+space layout toggle stacking tabbed splith splitv
+bindsym $mod+f fullscreen toggle
+bindsym $mod+a focus parent
+bindsym $mod+Shift+x focus mode_toggle
+
+# ── Flotantes y scratchpad ───────────────────────────────────────────────────
+bindsym $mod+Shift+space floating toggle; resize set 820 710; move position center
+bindsym $mod+Shift+minus move scratchpad
+bindsym $mod+minus       scratchpad show
+bindsym $mod+button2 kill
+bindsym $mod+button3 floating toggle
+
+# BTOP como "htop" en scratchpad
+bindsym $alt+h exec $term -a btop-scratch -e $bin/tui-run btop
+for_window [app_id="btop-scratch"] floating enable, resize set 1000 678, move scratchpad, move position center
+
+# Gestor de archivos en scratchpad
+bindsym $alt+e exec $term -a files-scratch -e $bin/sway-files
+for_window [app_id="files-scratch"] floating enable, resize set 1000 600, move scratchpad, move position center
+
+# Mezclador de audio (pulsemixer) flotante, sin color
+bindsym $alt+a exec $term -a pulsemixer -T pulsemixer -e pulsemixer
+for_window [app_id="pulsemixer"] floating enable, resize set 900 620, move position center
+
+# Bluetooth TUI (bluetui) flotante
+for_window [app_id="bluetui"] floating enable, move position center
+
+# ── Workspaces 1-10 (Super) y 11-20 (Alt) ────────────────────────────────────
+bindsym $mod+1 workspace number 1
+bindsym $mod+2 workspace number 2
+bindsym $mod+3 workspace number 3
+bindsym $mod+4 workspace number 4
+bindsym $mod+5 workspace number 5
+bindsym $mod+6 workspace number 6
+bindsym $mod+7 workspace number 7
+bindsym $mod+8 workspace number 8
+bindsym $mod+9 workspace number 9
+bindsym $mod+0 workspace number 10
+
+bindsym $alt+1 workspace number 11
+bindsym $alt+2 workspace number 12
+bindsym $alt+3 workspace number 13
+bindsym $alt+4 workspace number 14
+bindsym $alt+5 workspace number 15
+bindsym $alt+6 workspace number 16
+bindsym $alt+7 workspace number 17
+bindsym $alt+8 workspace number 18
+bindsym $alt+9 workspace number 19
+bindsym $alt+0 workspace number 20
+
+bindsym $mod+Shift+1 move container to workspace number 1
+bindsym $mod+Shift+2 move container to workspace number 2
+bindsym $mod+Shift+3 move container to workspace number 3
+bindsym $mod+Shift+4 move container to workspace number 4
+bindsym $mod+Shift+5 move container to workspace number 5
+bindsym $mod+Shift+6 move container to workspace number 6
+bindsym $mod+Shift+7 move container to workspace number 7
+bindsym $mod+Shift+8 move container to workspace number 8
+bindsym $mod+Shift+9 move container to workspace number 9
+bindsym $mod+Shift+0 move container to workspace number 10
+
+bindsym $alt+Shift+1 move container to workspace number 11
+bindsym $alt+Shift+2 move container to workspace number 12
+bindsym $alt+Shift+3 move container to workspace number 13
+bindsym $alt+Shift+4 move container to workspace number 14
+bindsym $alt+Shift+5 move container to workspace number 15
+bindsym $alt+Shift+6 move container to workspace number 16
+bindsym $alt+Shift+7 move container to workspace number 17
+bindsym $alt+Shift+8 move container to workspace number 18
+bindsym $alt+Shift+9 move container to workspace number 19
+bindsym $alt+Shift+0 move container to workspace number 20
+
+bindsym $mod+Ctrl+1 move container to workspace number 1; workspace number 1
+bindsym $mod+Ctrl+2 move container to workspace number 2; workspace number 2
+bindsym $mod+Ctrl+3 move container to workspace number 3; workspace number 3
+bindsym $mod+Ctrl+4 move container to workspace number 4; workspace number 4
+bindsym $mod+Ctrl+5 move container to workspace number 5; workspace number 5
+bindsym $mod+Ctrl+6 move container to workspace number 6; workspace number 6
+bindsym $mod+Ctrl+7 move container to workspace number 7; workspace number 7
+bindsym $mod+Ctrl+8 move container to workspace number 8; workspace number 8
+bindsym $mod+Ctrl+9 move container to workspace number 9; workspace number 9
+bindsym $mod+Ctrl+0 move container to workspace number 10; workspace number 10
+
+bindsym $alt+Ctrl+1 move container to workspace number 11; workspace number 11
+bindsym $alt+Ctrl+2 move container to workspace number 12; workspace number 12
+bindsym $alt+Ctrl+3 move container to workspace number 13; workspace number 13
+bindsym $alt+Ctrl+4 move container to workspace number 14; workspace number 14
+bindsym $alt+Ctrl+5 move container to workspace number 15; workspace number 15
+bindsym $alt+Ctrl+6 move container to workspace number 16; workspace number 16
+bindsym $alt+Ctrl+7 move container to workspace number 17; workspace number 17
+bindsym $alt+Ctrl+8 move container to workspace number 18; workspace number 18
+bindsym $alt+Ctrl+9 move container to workspace number 19; workspace number 19
+bindsym $alt+Ctrl+0 move container to workspace number 20; workspace number 20
+
+bindsym $alt+Tab workspace next
+bindsym $alt+Shift+Tab workspace prev
+
+# ── Gaps (Super+Ctrl+g, modo interactivo) ────────────────────────────────────
+set $gaps Gaps: (o) outer, (i) inner
+set $gaps_outer Outer: +|-|0 (local), Shift + +|-|0 (global)
+set $gaps_inner Inner: +|-|0 (local), Shift + +|-|0 (global)
+
+bindsym $mod+Ctrl+g mode "$gaps"
+mode "$gaps" {
+    bindsym o mode "$gaps_outer"
+    bindsym i mode "$gaps_inner"
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+mode "$gaps_inner" {
+    bindsym plus  gaps inner current plus 5
+    bindsym minus gaps inner current minus 5
+    bindsym 0     gaps inner current set 0
+    bindsym Shift+plus  gaps inner all plus 5
+    bindsym Shift+minus gaps inner all minus 5
+    bindsym Shift+0     gaps inner all set 0
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+mode "$gaps_outer" {
+    bindsym plus  gaps outer current plus 5
+    bindsym minus gaps outer current minus 5
+    bindsym 0     gaps outer current set 0
+    bindsym Shift+plus  gaps outer all plus 5
+    bindsym Shift+minus gaps outer all minus 5
+    bindsym Shift+0     gaps outer all set 0
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+
+# ── Teclado latam / inglés ───────────────────────────────────────────────────
+bindsym $mod+Shift+s exec swaymsg 'input type:keyboard xkb_layout latam; input type:keyboard xkb_variant deadtilde; input type:keyboard xkb_model pc104'
+bindsym $mod+Shift+e exec swaymsg 'input type:keyboard xkb_layout us; input type:keyboard xkb_variant intl; input type:keyboard xkb_model pc105'
+
+# ── Recargar / reiniciar / salir ─────────────────────────────────────────────
+bindsym $mod+Shift+c reload
+bindsym $mod+Shift+r restart
+bindsym $mod+q kill
+
+# ── Audio (PipeWire vía pactl) ───────────────────────────────────────────────
+bindsym --locked XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
+bindsym --locked XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
+bindsym --locked XF86AudioMute        exec pactl set-sink-mute @DEFAULT_SINK@ toggle
+bindsym --locked XF86AudioMicMute     exec pactl set-source-mute @DEFAULT_SOURCE@ toggle
+bindsym $alt+equal exec pactl set-sink-volume @DEFAULT_SINK@ +5%
+bindsym $alt+minus exec pactl set-sink-volume @DEFAULT_SINK@ -5%
+bindsym $alt+Shift+m exec pactl set-sink-mute @DEFAULT_SINK@ toggle
+
+# ── Multimedia (playerctl) ───────────────────────────────────────────────────
+bindsym --locked XF86AudioPlay exec playerctl play-pause
+bindsym --locked XF86AudioPause exec playerctl play-pause
+bindsym --locked XF86AudioPrev exec playerctl previous
+bindsym --locked XF86AudioNext exec playerctl next
+bindsym --locked XF86AudioStop exec playerctl stop
+bindsym $alt+l exec playerctl play-pause
+bindsym $alt+j exec playerctl previous
+bindsym $alt+k exec playerctl next
+
+# ── Brillo (si instalás brightnessctl) ───────────────────────────────────────
+bindsym --locked XF86MonBrightnessUp   exec brightnessctl set 5%+
+bindsym --locked XF86MonBrightnessDown exec brightnessctl set 5%-
+
+# ── Reglas de ventanas ───────────────────────────────────────────────────────
+assign [app_id="mpv"] workspace number 12
+for_window [app_id="mpv"] floating disable
+for_window [app_id="zen"] border pixel 1
+
+# Diálogos y popups los maneja Wayland/wlroots por su cuenta.
+for_window [title="(?i)^(open|save|choose|select)"] floating enable
+for_window [app_id="(?i).*(dialog|preferences|about).*"] floating enable
+
+# ── Barra de estado (swaybar, sin waybar) ────────────────────────────────────
+bar {
+    position top
+    height 24
+    font pango:DejaVu Sans Mono 9
+    pango_markup enabled
+    status_command /home/ldgnu/.local/bin/sway-status
+
+    colors {
+        statusline #ffffff
+        background #000000
+        separator  #ffffff
+        focused_workspace  #ffffff #000000 #ffffff
+        active_workspace   #808080 #000000 #ffffff
+        inactive_workspace #000000 #000000 #808080
+        urgent_workspace   #ffffff #000000 #ffffff
+        binding_mode       #ffffff #000000 #ffffff
+    }
+}
+
+include /etc/sway/config.d/*

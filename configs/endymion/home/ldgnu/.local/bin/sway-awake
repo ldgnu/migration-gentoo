@@ -1,0 +1,132 @@
+#!/bin/sh
+# sway-awake — evita que swayidle bloquee/apague la pantalla mientras mirás video.
+#
+# Uso:
+#   sway-awake toggle   alterna modo "peli" / idle normal
+#   sway-awake on       fuerza modo peli (sin bloqueo)
+#   sway-awake off      vuelve al idle normal (relanza swayidle)
+#   sway-awake auto     daemon: modo peli solo en fullscreen o video con audio
+#   sway-awake status   muestra el estado
+#
+# Atajo: Super+Shift+Escape
+
+set -u
+
+LOCK="swaylock -f -c 000000"
+PIDFILE="${XDG_RUNTIME_DIR:-/tmp}/sway-awake-auto.pid"
+
+launch_idle() {
+    swayidle -w \
+        timeout 900 "$LOCK" \
+        timeout 905 'swaymsg "output * power off"' \
+        resume 'swaymsg "output * power on"' \
+        before-sleep "$LOCK" \
+        >/dev/null 2>&1 &
+}
+
+is_idle_running() { pgrep -x swayidle >/dev/null 2>&1; }
+
+notify() {
+    command -v notify-send >/dev/null 2>&1 && \
+        notify-send -u low -t 2000 "$1" "$2" 2>/dev/null
+    return 0
+}
+
+enter_awake() {
+    pkill -x swayidle 2>/dev/null
+    swaymsg "output * power on" >/dev/null 2>&1
+}
+
+enter_idle() {
+    if ! is_idle_running; then launch_idle; fi
+}
+
+focused_fullscreen() {
+    command -v jq >/dev/null 2>&1 || return 1
+    swaymsg -t get_tree 2>/dev/null \
+        | jq -r '.. | objects | select(.focused==true) | .fullscreen_mode' \
+        | head -1
+}
+
+focused_appid() {
+    command -v jq >/dev/null 2>&1 || return 1
+    swaymsg -t get_tree 2>/dev/null \
+        | jq -r '.. | objects | select(.focused==true) | (.app_id // .window_properties.class) // empty' \
+        | head -1
+}
+
+browser_audio_playing() {
+    app=$(printf '%s' "$1" | tr 'A-Z' 'a-z')
+    case "$app" in
+        *zen*|*firefox*) pat="zen|firefox" ;;
+        *chrom*|*brave*) pat="chrom|brave" ;;
+        *) return 1 ;;
+    esac
+    pactl list sink-inputs 2>/dev/null \
+        | grep -E "application.process.binary|application.name" \
+        | grep -qiE "$pat"
+}
+
+watching() {
+    fs=$(focused_fullscreen)
+    [ "$fs" = "1" ] || [ "$fs" = "true" ] && return 0
+    app=$(focused_appid)
+    [ -n "$app" ] && browser_audio_playing "$app" && return 0
+    return 1
+}
+
+auto_daemon() {
+    if [ -f "$PIDFILE" ]; then
+        old=$(cat "$PIDFILE" 2>/dev/null)
+        [ -n "$old" ] && kill "$old" 2>/dev/null
+    fi
+    echo $$ > "$PIDFILE"
+
+    was_awake=0
+    while :; do
+        if watching; then
+            if is_idle_running; then
+                enter_awake
+                was_awake=1
+            fi
+        else
+            if [ "$was_awake" = 1 ] && ! is_idle_running; then
+                enter_idle
+                was_awake=0
+            fi
+        fi
+        sleep 15
+    done
+}
+
+case "${1:-toggle}" in
+    toggle)
+        if is_idle_running; then
+            enter_awake
+            notify "Modo peli" "Pantalla sin bloqueo"
+        else
+            enter_idle
+            notify "Idle normal" "Bloqueo a los 15 min"
+        fi
+        ;;
+    on)
+        enter_awake
+        notify "Modo peli" "Pantalla sin bloqueo"
+        ;;
+    off)
+        enter_idle
+        notify "Idle normal" "Bloqueo a los 15 min"
+        ;;
+    auto) auto_daemon ;;
+    status)
+        if is_idle_running; then
+            echo "idle normal (swayidle corriendo)"
+        else
+            echo "modo peli (swayidle frenado)"
+        fi
+        ;;
+    *)
+        echo "uso: $0 {toggle|on|off|auto|status}" >&2
+        exit 1
+        ;;
+esac

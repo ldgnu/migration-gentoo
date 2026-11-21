@@ -6,14 +6,49 @@ Un registro de instalación, contado con las capturas del proceso.
 Gentoo amd64, OpenRC, kernel 7.3.5, Sway sobre Wayland.
 Instalado el **17/11/2026**, auditado el **20/11/2026**.
 
-Durante toda la instalación corrió un watcher que sacaba una foto cada 20 segundos. Las 24
-capturas que están en este repo son de ahí: el proceso tal como pasó.
-
 ![El @world de 61 paquetes terminando](docs/registro-instalacion/capturas/20261117T191021Z-fin-world-61-de-61.jpg)
 
 *17/11, 19:10. Jobs 61 of 61 complete. Ahí supe que el sistema iba a arrancar.*
 
-## Empezá por acá
+---
+
+## La historia, en corto
+
+Venía de CachyOS: Arch con btrfs, LUKS y systemd. Andaba bien. El problema no era que
+fallara, era que no entendía qué hacía cada capa. Gentoo promete lo contrario —que cada
+pieza esté ahí porque la pusiste vos— y eso obliga a bajar hasta el kernel.
+[Por qué lo hice y qué encontré](docs/experiencia.md).
+
+Antes de tocar el disco lo ensayé dos días en una máquina virtual. Esa fue la mejor decisión
+del proceso: la red, las particiones, `pam_faillock` y el primer `@world` se rompieron en un
+disco virtual y no en el NVMe. [La fase de laboratorio](docs/vm.md).
+
+El 17 de noviembre fue el día real: NVMe reparticionado, stage3 openrc, 61 paquetes
+compilados, kernel 6.18.63 a mano, GRUB en la ESP y primer arranque. Todo quedó registrado
+por un watcher que sacaba una foto cada 20 segundos.
+[La cronología](docs/cronologia.md) · [las 24 capturas](docs/registro-instalacion/capturas/).
+
+Lo que salió mal salió mal una vez: `localmodconfig` se comió los drivers de los discos de
+datos, Tailscale pidió un `CONFIG_TUN` que no existía —y hubo que recompilar—, la red cambió
+de nombre tres veces entre la documentación y el hierro, y `pam_faillock` bloqueó la cuenta
+sin decir que era eso. [Cada error con su mensaje literal](docs/bitacora.md).
+
+Lo mejor fue el kernel, driver por driver. Un kernel no es un programa que "hace andar
+Linux": es el traductor entre el hardware y el resto del sistema, y cada opción del
+`.config` responde a quién se encarga de qué.
+[Qué driver necesita cada componente](docs/hardware.md).
+
+Y sí: se parece a Arch, pero por mi culpa. Usé binarios para lo pesado y puse `~amd64`
+global. La diferencia aparece cuando cambiás decisiones, no cuando compilás.
+[La comparación honesta](docs/experiencia.md#es-solo-un-arch-no-le-veo-la-diferencia).
+
+Hoy el sistema está sano y le faltan tres cosas: 102 rebuilds por el ABI de 32 bits que se
+quedó a medias, un firewall, y dos decisiones que nunca se registraron (cifrado en reposo y
+backup). [La auditoría completa](docs/auditorias/2026-11-20/README.md).
+
+## El índice
+
+### Empezá por acá
 
 | Si querés… | Andá a |
 |---|---|
@@ -21,8 +56,6 @@ capturas que están en este repo son de ahí: el proceso tal como pasó.
 | Entender qué pasó, en orden | [`docs/cronologia.md`](docs/cronologia.md) |
 | Leer la opinión sin filtro | [`docs/experiencia.md`](docs/experiencia.md) |
 | Ver qué está roto hoy | [`docs/auditorias/2026-11-20/`](docs/auditorias/2026-11-20/README.md) |
-
-## Todo lo que hay
 
 ### La instalación
 
@@ -53,16 +86,18 @@ capturas que están en este repo son de ahí: el proceso tal como pasó.
 | [`docs/auditorias/2026-11-20/estado/`](docs/auditorias/2026-11-20/estado/) | Las salidas crudas de la auditoría y el `emerge.log` |
 | [`docs/historial-paquetes.md`](docs/historial-paquetes.md) | Cada sesión de `emerge` con fecha y paquetes |
 
-### La referencia
+### La referencia y el backup
 
 | Documento | Qué vas a encontrar |
 |---|---|
+| [`configs/endymion/`](configs/endymion/) | La configuración real: Portage, flags, mirrors, fstab, GRUB, Sway y el kernel en uso |
+| [`configs/README.md`](configs/README.md) | Cómo restaurarla y qué no se copia a propósito |
+| [`scripts/capturar-configs.sh`](scripts/capturar-configs.sh) | Regenerar ese backup en un comando |
 | [`docs/hardware.md`](docs/hardware.md) | Qué driver necesita cada componente y dónde está en el menú del kernel |
 | [`docs/audio.md`](docs/audio.md) | PipeWire, WirePlumber, Bluetooth y codecs A2DP |
 | [`docs/migracion.md`](docs/migracion.md) | Qué hacer con los paquetes de la distro anterior |
 | [`docs/retomar.md`](docs/retomar.md) | Cómo volver al chroot después de apagar |
-| [`configs/`](configs/) | Portage, kernel, servicios y configuración de Sway |
-| [`scripts/`](scripts/) | Bootstrap, post-instalación y sync de configs |
+| [`configs/`](configs/) | Lo de la VM y la planificación previa, como registro histórico |
 
 ## Los números
 

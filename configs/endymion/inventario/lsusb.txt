@@ -1,0 +1,2 @@
+./scripts/capturar-configs.sh: línea 99: lsusb: orden no encontrada
+(no disponible)

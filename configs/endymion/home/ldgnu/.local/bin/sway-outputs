@@ -1,0 +1,23 @@
+#!/bin/sh
+# sway-outputs: resumen TUI de monitores y resoluciones.
+swaymsg -t get_outputs -r | python3 -c '
+import json, sys
+try:
+    outs = json.load(sys.stdin)
+except Exception:
+    print("No pude leer los outputs de sway.")
+    raise SystemExit(1)
+
+for o in outs:
+    if not o.get("active"):
+        continue
+    m = o.get("current_mode") or {}
+    mode = "%sx%s@%sHz" % (m.get("width", "?"), m.get("height", "?"), round(m.get("refresh", 0) / 1000.0, 2))
+    r = o.get("rect") or {}
+    pos = "%s,%s  %sx%s" % (r.get("x", "?"), r.get("y", "?"), r.get("width", "?"), r.get("height", "?"))
+    focus = "  <-- foco" if o.get("focused") else ""
+    print("%-12s %-28s %s%s" % (o.get("name", "?"), o.get("model", ""), mode, focus))
+    print("             pos %s" % pos)
+'
+printf '\n  Enter para cerrar...'
+read -r _

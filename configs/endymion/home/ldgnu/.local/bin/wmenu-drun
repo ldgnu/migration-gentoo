@@ -1,0 +1,72 @@
+#!/bin/sh
+# wmenu-drun — lanzador de apps instaladas (.desktop) para Sway.
+#
+# - Lista solo aplicaciones reales (Type=Application, sin NoDisplay/Hidden).
+# - Matching case-insensitive (wmenu -i): "zen", "Zen" y "ZEN" encuentran Zen.
+# - Estilo copia la barra de sway (swaybar): negro/blanco, seleccion invertida.
+# - No toca la barra: se dibuja encima, sin ocultar nada.
+#
+# Tamaño de fuente: variable WMENU_DRUN_FONT (default 9, igual que la barra).
+# Terminal=true se lanza dentro de foot.
+
+set -u
+
+FONT="${WMENU_DRUN_FONT:-DejaVu Sans Mono 9}"
+TERM_BIN="${TERM:-foot}"
+STYLE_N="-N #000000 -n #ffffff -M #000000 -m #ffffff -S #ffffff -s #000000"
+
+tmp=$(mktemp) || exit 1
+trap 'rm -f "$tmp"' EXIT INT TERM
+
+dirs="$HOME/.local/share/applications
+/var/lib/flatpak/exports/share/applications
+$HOME/.local/share/flatpak/exports/share/applications"
+oldifs=$IFS; IFS=:; for d in ${XDG_DATA_DIRS:-/usr/local/share:/usr/share}; do
+    dirs="$dirs
+$d/applications"
+done; IFS=$oldifs
+
+# nombre <TAB> exec <TAB> terminal? <TAB> archivo
+printf '%s\n' "$dirs" | while IFS= read -r d; do
+    [ -d "$d" ] || continue
+    find "$d" -maxdepth 1 -name '*.desktop' 2>/dev/null
+done | sort -u | while IFS= read -r f; do
+    awk -F= '
+        /^\[/ { sect=$0; next }
+        sect=="[Desktop Entry]" {
+            if ($1=="Name" && name=="") name=substr($0,6)
+            else if ($1=="Exec") ex=substr($0,6)
+            else if ($1=="Terminal") term=$2
+            else if ($1=="NoDisplay") nd=$2
+            else if ($1=="Hidden") hid=$2
+            else if ($1=="Type") typ=$2
+        }
+        END {
+            if (typ=="Application" && nd!="true" && hid!="true" && name!="" && ex!="")
+                printf "%s\t%s\t%s\t%s\n", name, ex, (term=="true"?"1":"0"), FILENAME
+        }
+    ' "$f"
+done > "$tmp"
+
+[ -s "$tmp" ] || exit 0
+
+sel=$(cut -f1 "$tmp" | sort -fu | /usr/bin/wmenu -f "$FONT" $STYLE_N -i -p 'run: ')
+
+[ -z "$sel" ] && exit 0
+
+line=$(awk -F'\t' -v n="$sel" '$1==n { print; exit }' "$tmp")
+[ -z "$line" ] && exit 0
+
+exec_str=$(printf '%s' "$line" | cut -f2)
+in_term=$(printf '%s' "$line" | cut -f3)
+
+# Sacar codes de campo de .desktop (%f %U %i ...). No soportamos pasar archivos.
+exec_str=$(printf '%s' "$exec_str" | sed -e 's/%[fFuUdDnNickvm]//g' -e 's/[[:space:]]\+$//')
+
+[ -z "$exec_str" ] && exit 0
+
+if [ "$in_term" = 1 ]; then
+    setsid "$TERM_BIN" -e sh -c "$exec_str" >/dev/null 2>&1 &
+else
+    setsid sh -c "$exec_str" >/dev/null 2>&1 &
+fi

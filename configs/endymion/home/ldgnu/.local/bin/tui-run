@@ -1,0 +1,15 @@
+#!/bin/sh
+# tui-run: abre un programa TUI en foot y avisa si falta el paquete.
+# Uso: tui-run <programa> [args...]
+app=$1
+[ -z "$app" ] && exit 1
+shift
+
+if ! command -v "$app" >/dev/null 2>&1; then
+    printf '\n  Falta el paquete para "%s".\n\n  Instalalo con emerge y volvé a intentar.\n\n' "$app"
+    printf '  Enter para cerrar...'
+    read -r _
+    exit 1
+fi
+
+exec "$app" "$@"

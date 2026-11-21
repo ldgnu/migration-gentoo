@@ -1,0 +1,2 @@
+# mpv: Wayland nativo, audio por PipeWire/Pulse, sin dependencias de Xorg
+media-video/mpv wayland pulseaudio -X

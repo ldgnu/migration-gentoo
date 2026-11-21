@@ -1,0 +1,235 @@
+#!/usr/bin/env python3
+"""sway-status — barra de swaybar monocroma.
+
+Muestra: CPU, RAM, temperatura, GPU, red, disco, volumen, layout y fecha.
+Lee todo de /proc, /sys y wpctl/pactl. No necesita waybar ni plugins.
+"""
+
+import glob
+import os
+import shutil
+import subprocess
+import time
+
+INTERVAL = 2.0
+LAYOUT_EVERY = 10.0
+
+DIM = "#888888"
+MID = "#aaaaaa"
+FG = "#ffffff"
+SEP = "#555555"
+
+
+def sh(cmd, timeout=1.5):
+    try:
+        return subprocess.run(
+            cmd, capture_output=True, text=True, timeout=timeout
+        ).stdout.strip()
+    except Exception:
+        return ""
+
+
+def read(path):
+    try:
+        with open(path) as f:
+            return f.read().strip()
+    except Exception:
+        return ""
+
+
+def human(n):
+    n = float(n)
+    for unit in ("B", "K", "M", "G"):
+        if n < 1024 or unit == "G":
+            return f"{n:.0f}{unit}" if unit == "B" else f"{n:.1f}{unit}"
+        n /= 1024
+    return f"{n:.1f}G"
+
+
+def cpu_percent(prev):
+    data = read("/proc/stat").splitlines()[0].split()
+    vals = [int(x) for x in data[1:]]
+    idle = vals[3] + (vals[4] if len(vals) > 4 else 0)
+    total = sum(vals)
+    if prev is None:
+        return 0, (idle, total)
+    didle = idle - prev[0]
+    dtotal = total - prev[1]
+    pct = 0 if dtotal <= 0 else round(100 * (dtotal - didle) / dtotal)
+    return max(0, min(100, pct)), (idle, total)
+
+
+def mem_percent():
+    info = {}
+    for line in read("/proc/meminfo").splitlines():
+        k, v = line.split(":", 1)
+        info[k] = int(v.strip().split()[0])
+    total = info.get("MemTotal", 0)
+    avail = info.get("MemAvailable", info.get("MemFree", 0))
+    if not total:
+        return 0
+    return round(100 * (total - avail) / total)
+
+
+def cpu_temp():
+    best = None
+    for hw in glob.glob("/sys/class/hwmon/hwmon*"):
+        name = read(os.path.join(hw, "name"))
+        for t in glob.glob(os.path.join(hw, "temp*_input")):
+            try:
+                val = int(read(t)) / 1000.0
+            except ValueError:
+                continue
+            if val <= 0 or val > 150:
+                continue
+            if name == "coretemp":
+                best = max(best, val) if best is not None else val
+            elif best is None:
+                best = val
+    return best
+
+
+def gpu_percent():
+    for p in glob.glob("/sys/class/drm/card*/device/gpu_busy_percent"):
+        v = read(p)
+        if v:
+            try:
+                return int(v)
+            except ValueError:
+                pass
+    return None
+
+
+def net_iface():
+    for line in read("/proc/net/route").splitlines()[1:]:
+        parts = line.split()
+        if len(parts) > 3 and parts[1] == "00000000":
+            return parts[0]
+    return None
+
+
+def net_bytes(iface):
+    base = f"/sys/class/net/{iface}/statistics"
+    try:
+        return int(read(f"{base}/rx_bytes")), int(read(f"{base}/tx_bytes"))
+    except ValueError:
+        return 0, 0
+
+
+def disk_percent():
+    try:
+        u = shutil.disk_usage("/home")
+        return round(100 * u.used / u.total)
+    except Exception:
+        return 0
+
+
+def volume():
+    out = sh(["wpctl", "get-volume", "@DEFAULT_AUDIO_SINK@"])
+    if out:
+        muted = "[MUTED]" in out
+        try:
+            pct = round(float(out.split()[1]) * 100)
+        except (IndexError, ValueError):
+            return "vol --"
+        return "vol mute" if muted else f"vol {pct}%"
+    out = sh(["pactl", "get-sink-volume", "@DEFAULT_SINK@"])
+    mute = sh(["pactl", "get-sink-mute", "@DEFAULT_SINK@"])
+    if not out:
+        return "vol --"
+    try:
+        pct = int(out.split("/")[1].strip().split("%")[0])
+    except (IndexError, ValueError):
+        return "vol --"
+    return "vol mute" if mute.endswith("yes") else f"vol {pct}%"
+
+
+def layout():
+    out = sh(["swaymsg", "-t", "get_inputs", "-r"], timeout=1.0)
+    if not out:
+        return "?"
+    import json
+
+    try:
+        for i in json.loads(out):
+            n = i.get("xkb_active_layout_name")
+            if i.get("type") == "keyboard" and n:
+                low = n.lower()
+                if "spanish" in low or "latam" in low:
+                    return "latam"
+                if "english" in low or "us" == low:
+                    return "us"
+                return n.split("(")[0].strip()[:6]
+    except Exception:
+        pass
+    return "?"
+
+
+def span(color, text):
+    return f'<span foreground="{color}">{text}</span>'
+
+
+def main():
+    prev_cpu = None
+    prev_net = None
+    prev_net_t = time.time()
+    lay = "?"
+    lay_t = 0.0
+    iface = net_iface()
+
+    while True:
+        now = time.time()
+        cpu, prev_cpu = cpu_percent(prev_cpu)
+        mem = mem_percent()
+        temp = cpu_temp()
+        gpu = gpu_percent()
+
+        if now - lay_t >= LAYOUT_EVERY:
+            lay = layout()
+            lay_t = now
+
+        rx = tx = 0
+        if iface:
+            rx, tx = net_bytes(iface)
+        dtime = max(0.1, now - prev_net_t)
+        if prev_net is not None:
+            down = max(0, rx - prev_net[0]) / dtime
+            up = max(0, tx - prev_net[1]) / dtime
+        else:
+            down = up = 0
+        prev_net = (rx, tx)
+        prev_net_t = now
+
+        parts = [
+            span(DIM, "CPU") + " " + span(FG, f"{cpu}%"),
+            span(DIM, "RAM") + " " + span(FG, f"{mem}%"),
+        ]
+        if temp is not None:
+            parts.append(span(DIM, "T") + " " + span(FG, f"{temp:.0f}°C"))
+        if gpu is not None:
+            parts.append(span(DIM, "GPU") + " " + span(FG, f"{gpu}%"))
+        if iface:
+            parts.append(
+                span(DIM, "↓") + span(FG, human(down) + "/s")
+                + " " + span(DIM, "↑") + span(FG, human(up) + "/s")
+            )
+        else:
+            parts.append(span(DIM, "net --"))
+        parts.append(span(DIM, "/") + " " + span(FG, f"{disk_percent()}%"))
+        parts.append(span(FG, volume()))
+        parts.append(span(MID, f"[{lay}]"))
+        parts.append(span(MID, time.strftime("%a %d %b  %H:%M")))
+
+        line = span(SEP, "  ·  ").join(parts)
+        try:
+            print(line, flush=True)
+        except BrokenPipeError:
+            break
+        time.sleep(INTERVAL)
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except KeyboardInterrupt:
+        pass

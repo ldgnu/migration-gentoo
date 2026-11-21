@@ -1,0 +1,4 @@
+# Paquetes de GURU usados por el entorno TUI
+app-misc/yazi       ~amd64
+app-misc/cliphist   ~amd64
+dev-vcs/lazygit     ~amd64
