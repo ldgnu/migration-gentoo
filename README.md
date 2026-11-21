@@ -24,6 +24,14 @@ Instalado el **17/11/2026**, auditado el **20/11/2026**.
 
 *17/11, 19:10. Jobs 61 of 61 complete. Ahí supe que el sistema iba a arrancar.*
 
+## Cómo se ve hoy
+
+![Los dos monitores de endymion: a la izquierda opencode y yazi, a la derecha btop y una sesión SSH](docs/img/07-escritorio-2026-11-21.png)
+
+*21/11. A la izquierda, 1920×1080: opencode y yazi. A la derecha, en vertical: btop y una
+sesión SSH. La barra de arriba es swaybar, sin plugins. Todo corre sobre Wayland; no hay
+Xorg instalado.*
+
 ---
 
 ## La historia, en corto
