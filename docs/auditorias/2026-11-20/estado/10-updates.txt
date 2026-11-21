@@ -1,0 +1,34 @@
+### PRESERVED
+
+These are the packages that would be merged, in order:
+
+Calculating dependencies ... done!
+Dependency resolution took 0.65 s (backtrack: 0/20).
+
+
+### WORLD UPDATE (dry-run, sin sync)
+[ebuild   R    ] media-libs/libplacebo-7.387.0  ABI_X86="32*" 
+[ebuild   R    ] llvm-core/llvm-20.1.8  ABI_X86="32*" 
+[ebuild   R    ] llvm-core/clang-20.1.8  ABI_X86="32*" 
+[ebuild   R    ] llvm-core/llvm-23.1.6  ABI_X86="32*" 
+[ebuild   R    ] llvm-core/clang-23.1.6-r1  ABI_X86="32*" 
+[ebuild   R    ] dev-libs/json-glib-1.10.8  ABI_X86="32*" 
+[ebuild   R    ] media-libs/libass-0.17.5-r1  ABI_X86="32*" 
+[ebuild   R    ] media-video/ffmpeg-compat-7.1.5-r1  ABI_X86="32*" 
+[ebuild   R    ] media-video/ffmpeg-9.0.2-r1  ABI_X86="32*" 
+[ebuild   R    ] net-wireless/bluez-5.88  ABI_X86="32*" 
+[ebuild   R    ] sys-apps/pciutils-3.15.0  ABI_X86="32*" 
+[ebuild   R    ] sys-fs/fuse-3.18.3  ABI_X86="32*" 
+[ebuild   R    ] sys-fs/e2fsprogs-1.47.4  ABI_X86="32*" 
+[ebuild   R    ] x11-libs/libSM-1.2.6  ABI_X86="32*" 
+[ebuild   R    ] x11-libs/libXt-1.3.1-r1  ABI_X86="32*" 
+[ebuild   R    ] app-arch/libarchive-3.8.11  ABI_X86="32*" 
+[ebuild   R    ] x11-libs/libXmu-1.3.1  ABI_X86="32*" 
+[ebuild   R    ] x11-libs/libXpm-3.5.20  ABI_X86="32*" 
+[ebuild   R    ] x11-libs/libXaw-1.0.16  ABI_X86="32*" 
+[ebuild   R    ] sys-process/procps-4.0.6  ABI_X86="32*" 
+[ebuild   R    ] media-video/pipewire-1.6.11  ABI_X86="32*" 
+[ebuild   R    ] sys-libs/pam-1.7.3  ABI_X86="32*" 
+[ebuild   R    ] sys-libs/libcap-2.78  ABI_X86="32*" 
+[ebuild   R    ] net-print/cups-2.4.19  ABI_X86="32*" 
+[ebuild     U  ] net-mail/mailutils-3.21-r1 [3.21] PYTHON_SINGLE_TARGET="-python3_15%" 

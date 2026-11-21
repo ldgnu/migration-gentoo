@@ -1,0 +1,96 @@
+### RC-STATUS
+Runlevel: boot
+ hwclock                                                           [  started  ]
+ modules                                                           [  started  ]
+ fsck                                                              [  started  ]
+ root                                                              [  started  ]
+ mtab                                                              [  started  ]
+ swap                                                              [  started  ]
+ localmount                                                        [  started  ]
+ seedrng                                                           [  started  ]
+ termencoding                                                      [  started  ]
+ sysctl                                                            [  started  ]
+ bootmisc                                                          [  started  ]
+ keymaps                                                           [  started  ]
+ save-keymaps                                                      [  started  ]
+ save-termencoding                                                 [  started  ]
+ hostname                                                          [  started  ]
+ procfs                                                            [  started  ]
+ systemd-tmpfiles-setup                                            [  started  ]
+ consolefont                                                       [  started  ]
+ binfmt                                                            [  started  ]
+ loopback                                                          [  started  ]
+Runlevel: nonetwork
+ local                                                             [  started  ]
+Runlevel: shutdown
+ savecache                                                         [  stopped  ]
+ killprocs                                                         [  stopped  ]
+ mount-ro                                                          [  stopped  ]
+Runlevel: sysinit
+ sysfs                                                             [  started  ]
+ devfs                                                             [  started  ]
+ kmod-static-nodes                                                 [  started  ]
+ cgroups                                                           [  started  ]
+ udev                                                              [  started  ]
+ dmesg                                                             [  started  ]
+ systemd-tmpfiles-setup-dev                                        [  started  ]
+ udev-trigger                                                      [  started  ]
+Runlevel: default
+ bluetooth                                                         [  started  ]
+ chronyd                                                           [  started  ]
+ sysklogd                                                          [  started  ]
+ cronie                                                            [  started  ]
+ elogind                                                           [  started  ]
+ net.eno1                                                          [  started  ]
+ netmount                                                          [  started  ]
+ seatd                                                 [  started 04:53:43 (0) ]
+ sshd                                                              [  started  ]
+ local                                                             [  started  ]
+Dynamic Runlevel: hotplugged
+ user.ldgnu                                            [  started 04:53:11 (0) ]
+Dynamic Runlevel: needed/wanted
+ dbus                                                  [  started 04:53:51 (0) ]
+Dynamic Runlevel: manual
+
+### SERVICIOS HABILITADOS
+                     binfmt | boot                                   
+                  bluetooth |      default                           
+                   bootmisc | boot                                   
+                    cgroups |                                 sysinit
+                    chronyd |      default                           
+                consolefont | boot                                   
+                     cronie |      default                           
+                      devfs |                                 sysinit
+                      dmesg |                                 sysinit
+                    elogind |      default                           
+                       fsck | boot                                   
+                   hostname | boot                                   
+                    hwclock | boot                                   
+                    keymaps | boot                                   
+                  killprocs |                        shutdown        
+          kmod-static-nodes |                                 sysinit
+                      local |      default nonetwork                 
+                 localmount | boot                                   
+                   loopback | boot                                   
+                    modules | boot                                   
+                   mount-ro |                        shutdown        
+                       mtab | boot                                   
+                   net.eno1 |      default                           
+                   netmount |      default                           
+                     procfs | boot                                   
+                       root | boot                                   
+               save-keymaps | boot                                   
+          save-termencoding | boot                                   
+                  savecache |                        shutdown        
+                      seatd |      default                           
+                    seedrng | boot                                   
+                       sshd |      default                           
+                       swap | boot                                   
+                     sysctl | boot                                   
+                      sysfs |                                 sysinit
+                   sysklogd |      default                           
+     systemd-tmpfiles-setup | boot                                   
+ systemd-tmpfiles-setup-dev |                                 sysinit
+               termencoding | boot                                   
+                       udev |                                 sysinit
+               udev-trigger |                                 sysinit

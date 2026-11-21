@@ -1,0 +1,105 @@
+### WORLD
+app-admin/eclean-kernel
+app-admin/logrotate
+app-admin/sudo
+app-admin/sysklogd
+app-arch/7zip
+app-arch/atool
+app-arch/unrar
+app-arch/zip
+app-editors/neovim
+app-eselect/eselect-repository
+app-misc/cliphist
+app-misc/fastfetch
+app-misc/jq
+app-misc/ranger
+app-misc/screen
+app-misc/tmux
+app-misc/yazi
+app-portage/cpuid2cpuflags
+app-portage/gentoolkit
+app-shells/bash-completion
+app-shells/fzf
+app-shells/zoxide
+app-text/poppler
+dev-util/vulkan-tools
+dev-vcs/git
+dev-vcs/lazygit
+games-util/steam-launcher
+gui-apps/foot
+gui-apps/grim
+gui-apps/mako
+gui-apps/slurp
+gui-apps/swappy
+gui-apps/swaybg
+gui-apps/swayidle
+gui-apps/swaylock
+gui-apps/wl-clipboard
+gui-apps/wmenu
+gui-libs/xdg-desktop-portal-wlr
+gui-wm/sway
+media-fonts/dejavu
+media-fonts/liberation-fonts
+media-gfx/chafa
+media-libs/libfreeaptx
+media-libs/libpulse
+media-libs/mesa
+media-libs/opus
+media-libs/vulkan-loader
+media-sound/alsa-utils
+media-sound/ncpamixer
+media-sound/playerctl
+media-video/mpv
+media-video/pipewire
+media-video/wireplumber
+net-misc/chrony
+net-misc/yt-dlp
+net-vpn/tailscale
+net-wireless/bluez
+sys-apps/bat
+sys-apps/dbus
+sys-apps/eza
+sys-apps/fd
+sys-apps/lm-sensors
+sys-apps/plocate
+sys-apps/ripgrep
+sys-apps/smartmontools
+sys-apps/xdg-desktop-portal
+sys-apps/xdg-desktop-portal-gtk
+sys-auth/elogind
+sys-auth/rtkit
+sys-auth/seatd
+sys-boot/grub
+sys-firmware/intel-microcode
+sys-fs/dosfstools
+sys-fs/duf
+sys-fs/exfatprogs
+sys-fs/ncdu
+sys-fs/ntfs3g
+sys-kernel/dracut
+sys-kernel/gentoo-sources
+sys-kernel/gentoo-sources:6.18.63
+sys-kernel/installkernel
+sys-kernel/linux-firmware
+sys-process/btop
+sys-process/cronie
+www-client/zen-bin
+x11-base/xwayland
+
+### KERNELS INSTALADOS
+/usr/src/linux-6.18.63-gentoo
+/usr/src/linux-7.3.5-gentoo
+sys-kernel/gentoo-sources-7.3.5
+sys-kernel/gentoo-sources-6.18.63
+6.18.63-gentoo-gentoo-dist
+7.3.5-gentoo-gentoo-dist
+
+### GRUB DEFAULT
+
+### FSTAB
+UUID=f58fb93f-1681-423f-a6f2-ce6a6e8d9752  /      ext4  defaults,noatime  0 1
+UUID=43f0b8b6-4345-4494-b4b9-5c5be26f7e6b  /home  ext4  defaults,noatime  0 2
+UUID=CBD5-7071                             /efi   vfat  umask=0077        0 2
+UUID=a843caf6-6f1e-4712-b151-b3e275149399  none   swap  sw                0 0
+UUID=2A2F-50A0         /mnt/PirateNW     exfat   uid=1000,gid=1000,umask=022,noatime,nofail  0 0
+UUID=C66AAC5A6AAC48CF  /mnt/PirateGames  ntfs3   uid=1000,gid=1000,umask=022,noatime,nofail  0 0

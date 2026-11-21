@@ -1,0 +1,45 @@
+### GRUB CFG
+   set default="${next_entry}"
+   set default="0"
+if [ x"${feature_menuentry_id}" = xy ]; then
+  menuentry_id_option="--id"
+  menuentry_id_option=""
+export menuentry_id_option
+### BEGIN /etc/grub.d/10_linux ###
+menuentry 'Gentoo GNU/Linux' --class gentoo --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-simple-f58fb93f-1681-423f-a6f2-ce6a6e8d9752' {
+submenu 'Advanced options for Gentoo GNU/Linux' $menuentry_id_option 'gnulinux-advanced-f58fb93f-1681-423f-a6f2-ce6a6e8d9752' {
+	menuentry 'Gentoo GNU/Linux, with Linux 7.3.5-gentoo-gentoo-dist' --class gentoo --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-7.3.5-gentoo-gentoo-dist-advanced-f58fb93f-1681-423f-a6f2-ce6a6e8d9752' {
+	menuentry 'Gentoo GNU/Linux, with Linux 7.3.5-gentoo-gentoo-dist (recovery mode)' --class gentoo --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-7.3.5-gentoo-gentoo-dist-recovery-f58fb93f-1681-423f-a6f2-ce6a6e8d9752' {
+	menuentry 'Gentoo GNU/Linux, with Linux 7.3.5-gentoo-gentoo-dist.old' --class gentoo --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-7.3.5-gentoo-gentoo-dist.old-advanced-f58fb93f-1681-423f-a6f2-ce6a6e8d9752' {
+	menuentry 'Gentoo GNU/Linux, with Linux 7.3.5-gentoo-gentoo-dist.old (recovery mode)' --class gentoo --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-7.3.5-gentoo-gentoo-dist.old-recovery-f58fb93f-1681-423f-a6f2-ce6a6e8d9752' {
+	menuentry 'Gentoo GNU/Linux, with Linux 6.18.63-gentoo-gentoo-dist' --class gentoo --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-6.18.63-gentoo-gentoo-dist-advanced-f58fb93f-1681-423f-a6f2-ce6a6e8d9752' {
+	menuentry 'Gentoo GNU/Linux, with Linux 6.18.63-gentoo-gentoo-dist (recovery mode)' --class gentoo --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-6.18.63-gentoo-gentoo-dist-recovery-f58fb93f-1681-423f-a6f2-ce6a6e8d9752' {
+### END /etc/grub.d/10_linux ###
+		menuentry 'UEFI Firmware Settings' $menuentry_id_option 'uefi-firmware' {
+  menuentry 'Gentoo (EFI BootNext)' --class gentoo --class os $menuentry_id_option 'efi-bootnext-0000' {
+  menuentry 'UEFI:CD/DVD Drive (EFI BootNext)' --class uefi_cd_dvd --class os $menuentry_id_option 'efi-bootnext-0001' {
+  menuentry 'UEFI:Removable Device (EFI BootNext)' --class uefi_removable --class os $menuentry_id_option 'efi-bootnext-0002' {
+  menuentry 'UEFI:Network Device (EFI BootNext)' --class uefi_network --class os $menuentry_id_option 'efi-bootnext-0003' {
+  menuentry 'Windows Boot Manager (EFI BootNext)' --class windows --class os $menuentry_id_option 'efi-bootnext-0008' {
+
+### KERNEL ACTUAL vs SRC
+7.3.5-gentoo-gentoo-dist
+/usr/src/linux-7.3.5-gentoo
+Available kernel symlink targets:
+  [1]   linux-6.18.63-gentoo
+  [2]   linux-7.3.5-gentoo *
+
+### PAQUETES
+739
+
+### USUARIOS
+nobody 65534 65534 /var/empty /bin/false
+ldgnu 1000 1000 /home/ldgnu /bin/bash
+--- grupos ldgnu
+uid=1000(ldgnu) gid=1000(ldgnu) grupos=1000(ldgnu),10(wheel),18(audio),27(video),85(usb),250(portage),202(seat),509(pipewire)
+
+### SUDO
+Defaults!/usr/sbin/visudo env_keep += "SUDO_EDITOR EDITOR VISUAL"
+Defaults secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/bin"
+%wheel ALL=(ALL:ALL) ALL
+%wheel ALL=(ALL:ALL) NOPASSWD: ALL

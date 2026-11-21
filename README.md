@@ -38,6 +38,11 @@ docs/vm.md                la instalación de práctica en una VM (laboratorio)
 docs/migracion.md         qué hacer con los 493 paquetes de CachyOS
 docs/decisiones.md        cada bifurcación y el motivo de la elección
 docs/bitacora.md          fecha, qué se rompió, cómo se resolvió
+docs/cronologia.md        el recorrido consolidado: VM, fierro, escritorio y kernel
+docs/experiencia.md       la vivencia: qué gustó, qué no, y la comparación con Arch
+docs/historial-paquetes.md cada sesión de emerge con fecha y paquetes
+docs/auditorias/          auditorías fechadas del sistema en funcionamiento
+docs/registro-instalacion/ watcher de la instalación: comandos, cambios y 24 capturas
 docs/conceptos.md         explicaciones con analogías
 docs/retomar.md           cómo volver al chroot después de apagar
 docs/prompt-asistente.md  prompt autocontenido para asistencia desde el celular
@@ -86,14 +91,18 @@ maim -s docs/img/nombre.png
 
 ## Reglas del repositorio
 
-- Solo texto y configuración. Nada de binarios ni artefactos de compilación.
+- Solo texto y configuración. Las capturas van como evidencia en `docs/img/` y
+  `docs/registro-instalacion/capturas/`; nada de binarios ni artefactos de compilación.
 - Nunca se commitean claves, tokens, contraseñas, `/etc/shadow` ni direcciones internas.
 - Todo secreto que entre al historial sigue ahí cuando el repo se haga público.
 
 ## Estado
 
-Instalación en curso. Sistema base instalado, kernel en configuración. Ver `docs/retomar.md`
-para el estado detallado y lo que falta.
+Instalado y en uso desde el 2026-11-17. Gentoo amd64, OpenRC, kernel 7.3.5, Sway/Wayland,
+PipeWire, Steam y Tailscale. 739 paquetes, Portage consistente.
+
+La foto completa, con lo que falta, está en
+[`docs/auditorias/2026-11-20/README.md`](docs/auditorias/2026-11-20/README.md).
 
 ## Por qué configurar el kernel a mano
 

@@ -602,3 +602,99 @@ Qué aprendí:
 `make install` con `installkernel` en `USE="dracut grub"` genera el initramfs y corre
 `grub-mkconfig` solo. Lo único manual es `grub-install` en el disco.
 Y un `make` sin `-j` en un kernel se nota: 1167 objetos en 18 minutos es un proceso por vez.
+
+## 2026-11-17 — Instalación en hardware: corte de estado
+
+Qué hice:
+Instalé el stage3 openrc del 2026-11-15 en el NVMe, sincronicé el árbol de Portage,
+instalé `mirrorselect` y `screen`, y ajusté `make.conf` con `-march=native`, `-j8` y los
+mirrors. Después audité el sistema completo desde el live, sin modificar nada.
+
+Verificación:
+```
+nvme0n1p1   1 GiB   vfat   /mnt/gentoo/efi
+nvme0n1p2   16 GiB  swap   activa
+nvme0n1p3   100 GiB ext4   /mnt/gentoo
+nvme0n1p4   360 GiB ext4   /mnt/gentoo/home
+
+/var/db/pkg: 297 paquetes
+/boot: vacío
+/usr/src: vacío
+/etc/fstab: plantilla del stage3, sin entradas activas
+```
+
+Qué falló:
+- El primer mirror de `GENTOO_MIRRORS` (`gentoo.zero.com.ar`) no resuelve por DNS; el
+  fetch de `screen` siguió con `gentoo.c3sl.ufpr.br`.
+- `emerge screen` sin categoría: nombre ambiguo. Va `app-misc/screen`.
+- No hay historial de shell dentro del chroot, así que la cronología se reconstruyó con
+  mtime y `emerge.log`.
+
+Qué aprendí:
+El esquema real no coincide con `hardware.md`: la ESP es de 1 GiB, hay swap de 16 GiB y
+home de 360 GiB, y no hay LUKS. El fstab y el `grub-install` del repo son de la VM y no
+sirven acá. El detalle está en `auditorias/instalacion-hardware-2026-11-17.md`.
+
+## 2026-11-17 — Segundo @world completo (61 paquetes)
+
+Qué hice:
+Dejé corriendo `emerge --ask --verbose --update --deep --newuse @world` en el chroot y
+esperé a que terminara. Mientras tanto armé el registro automático de la instalación y las
+capturas de pantalla.
+
+Verificación:
+```
+Jobs: 61 of 61 complete    Load avg: 3.58, 4.56, 4.26
+...
+Regenerating GNU info directory index...
+Processed 102 info files.
+```
+
+El total de paquetes pasó de 297 a 298: fueron 61 actualizaciones, no instalaciones nuevas.
+
+Mensajes que importan:
+```
+* Unable to find kernel sources at /usr/src/linux          (normal: falta el kernel)
+* After upgrading glibc, please restart all running processes.
+* Make sure you run 'hash -r' in your active shells.
+* The mesg/wall/write tools have been disabled due to USE=-tty-helpers.
+```
+
+Qué falló:
+Nada. El único aviso con consecuencia real es el de glibc: hay que reiniciar procesos (o
+directamente reiniciar), y como el chroot usa el glibc del live hasta que se reinicia, no
+conviene confiar en el entorno para compilar el kernel. La salida quedó en
+`docs/capturas/20261117T191021Z-detalle-emerge-fin.jpg`.
+
+Qué aprendí:
+`emerge` dentro de `arch-chroot` corre en un namespace de PID aparte: desde el live no se
+ve con `pgrep`, solo con `nsenter -t <pid del chroot> -p -m -- ps`. Por eso el intento de
+18:30:19 parecía colgado cuando en realidad estaba compilando.
+
+## 2026-11-17 — Kernel manual, GRUB y red
+
+Qué hice:
+Compilé `gentoo-sources-6.18.63` a mano con `make && make modules_install && make install`,
+instalé `installkernel` con `dracut` y `grub`, escribí el `/etc/fstab` real, puse hostname
+`endymion`, zona horaria `America/Argentina/Cordoba`, locales `en_US` y `es_AR`, teclado
+`la-latin1`, contraseña de root, y configuré `net.eno1` por DHCP con `sshd`.
+
+Verificación:
+```
+6.18.63-gentoo-gentoo-dist (root@livecd) #1 SMP PREEMPT_DYNAMIC
+/boot/vmlinuz-6.18.63-gentoo-gentoo-dist          28 MB
+/boot/initramfs-6.18.63-gentoo-gentoo-dist.img   9,4 MB (zstd)
+/lib/modules/6.18.63-gentoo-gentoo-dist           189 módulos
+/efi/EFI/Gentoo/grubx64.efi                       167 KB
+Boot0000* Gentoo  HD(1,GPT,7bb9c7f1-…)/\EFI\Gentoo\grubx64.efi
+```
+
+Qué falló:
+Nada durante la compilación. El hueco fue de registro: la sesión de chroot donde se compiló
+no tenía cargado `/root/.bashrc`, así que esos comandos no quedaron en `comandos.md`.
+El rastro sí está en `emerge.log`, en los mtimes y en las capturas.
+
+Qué aprendí:
+El nombre `…-gentoo-dist` sale de `CONFIG_LOCALVERSION`, no de haber usado un binario
+oficial. Por eso `/usr/src/linux` y `/lib/modules` no se llaman igual. El detalle completo
+está en `auditorias/instalacion-hardware-2026-11-17.md` §10.

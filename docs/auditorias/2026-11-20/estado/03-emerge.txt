@@ -1,0 +1,27 @@
+### EMERGE LOG INICIO/FIN
+-rw-rw---- 1 portage portage 531957 nov 19 23:36 /var/log/emerge.log
+1794938668: Started emerge on: Nov 17, 2026 18:04:28
+1794938668:  *** emerge --jobs=3 --load-average=12.0 --regex-search-auto=y --sync
+1794938668:  === sync
+...
+1795047220:  *** terminating.
+1795142126: Started emerge on: nov 19, 2026 23:35:26
+1795142126:  *** emerge --ask --jobs=3 --load-average=12.0 --regex-search-auto=y net-vpn/tailscale
+1795142130:  >>> emerge (1 of 1) net-vpn/tailscale-1.104.5 to /
+1795142130:  === (1 of 1) Cleaning (net-vpn/tailscale-1.104.5::/var/db/repos/gentoo/net-vpn/tailscale/tailscale-1.104.5.ebuild)
+1795142130:  === (1 of 1) Compiling/Merging (net-vpn/tailscale-1.104.5::/var/db/repos/gentoo/net-vpn/tailscale/tailscale-1.104.5.ebuild)
+1795142207:  === (1 of 1) Merging (net-vpn/tailscale-1.104.5::/var/db/repos/gentoo/net-vpn/tailscale/tailscale-1.104.5.ebuild)
+1795142208:  >>> AUTOCLEAN: net-vpn/tailscale:0
+1795142208:  === Unmerging... (net-vpn/tailscale-1.104.5)
+1795142208:  >>> unmerge success: net-vpn/tailscale-1.104.5
+1795142209:  === (1 of 1) Post-Build Cleaning (net-vpn/tailscale-1.104.5::/var/db/repos/gentoo/net-vpn/tailscale/tailscale-1.104.5.ebuild)
+1795142209:  ::: completed emerge (1 of 1) net-vpn/tailscale-1.104.5 to /
+1795142209:  *** Finished. Cleaning up...
+1795142209:  *** exiting successfully.
+1795142209:  *** terminating.
+
+### PRIMER TIMESTAMP
+1794938668: Started emerge on: Nov 17, 2026 18:04:28
+
+### ULTIMO
+1795142209:  *** terminating.

@@ -1,0 +1,61 @@
+### GPU
+03:00.0 VGA compatible controller: Advanced Micro Devices, Inc. [AMD/ATI] Navi 23 [Radeon RX 6600/6600 XT/6600M] (rev c7)
+	Subsystem: Tul Corporation / PowerColor Device 2413
+	Kernel driver in use: amdgpu
+	Kernel modules: amdgpu
+
+### DRM CARGA
+
+### AUDIO
+Cadena de servidor: /run/user/1000/pulse/native
+Versión de protocolo de biblioteca: 35
+Versión de protocolo de servidor: 35
+Es local: sí
+Índice de cliente: 10230
+Tamaño de grupo: 65472
+Nombre del usuario: ldgnu
+Nombre del equipo: endymion
+--- sinks
+58	alsa_output.pci-0000_00_1f.3.analog-stereo	PipeWire	s32le 2ch 48000Hz	SUSPENDED
+--- wp
+PipeWire 'pipewire-0' [1.6.11, ldgnu@endymion, cookie:2221610590]
+ └─ Clients:
+        32. pipewire                            [1.6.11, ldgnu@endymion, pid:2518]
+        34. WirePlumber                         [1.6.11, ldgnu@endymion, pid:2538]
+        47. WirePlumber [client]                [1.6.11, ldgnu@endymion, pid:2538]
+        60. Zen                                 [1.6.11, ldgnu@endymion, pid:2658]
+        61. Steam Voice Settings                [1.6.11, ldgnu@endymion, pid:16541]
+        62. Steam                               [1.6.11, ldgnu@endymion, pid:16541]
+        63. Chromium input                      [1.6.11, ldgnu@endymion, pid:23418]
+        67. wpctl                               [1.6.11, ldgnu@endymion, pid:99573]
+
+Audio
+ ├─ Devices:
+ │      48. Navi 21/23 HDMI/DP Audio Controller [alsa]
+ │      49. Redragon Gaming Headset             [alsa]
+ │      50. Audio Interno                       [alsa]
+ │  
+ ├─ Sinks:
+ │  *   57. Audio Interno Estéreo analógico   [vol: 0.75]
+ │  
+ ├─ Sources:
+ │      58. Audio Interno Estéreo analógico   [vol: 1.00]
+ │  
+ ├─ Filters:
+ │  
+
+### RED
+lo               UNKNOWN        127.0.0.1/8 ::1/128 
+eno1             UP             192.168.0.10/24 2001:db8::10/64 fe80::1/64 
+--- ip route
+default via 192.168.0.1 dev eno1 proto dhcp src 192.168.0.10 metric 2 
+192.168.0.0/24 dev eno1 proto dhcp scope link src 192.168.0.10 metric 2 
+--- tailscale
+
+### SESION
+XDG_SESSION_TYPE=wayland DESKTOP=
+SESSION  UID USER  SEAT  LEADER CLASS      TTY  IDLE SINCE
+      1 1000 ldgnu seat0 2385   user       tty1 yes  4h 53min ago
+     c1 1000 ldgnu -     2421   background -    no   -
+
+2 sessions listed.

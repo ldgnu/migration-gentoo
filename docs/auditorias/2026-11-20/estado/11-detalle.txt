@@ -1,0 +1,36 @@
+### CUANTOS REBUILDS PENDIENTES
+102
+### TOTAL LINEA
+
+### GRUB LINUX/INITRD
+menuentry 'Gentoo GNU/Linux' --class gentoo --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-simple-f58fb93f-1681-423f-a6f2-ce6a6e8d9752' {
+	search --no-floppy --fs-uuid --set=root f58fb93f-1681-423f-a6f2-ce6a6e8d9752
+	linux	/boot/vmlinuz-7.3.5-gentoo-gentoo-dist root=UUID=f58fb93f-1681-423f-a6f2-ce6a6e8d9752 ro  
+	initrd	/boot/intel-uc.img /boot/amd-uc.img /boot/initramfs-7.3.5-gentoo-gentoo-dist.img
+	menuentry 'Gentoo GNU/Linux, with Linux 7.3.5-gentoo-gentoo-dist' --class gentoo --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-7.3.5-gentoo-gentoo-dist-advanced-f58fb93f-1681-423f-a6f2-ce6a6e8d9752' {
+		search --no-floppy --fs-uuid --set=root f58fb93f-1681-423f-a6f2-ce6a6e8d9752
+		linux	/boot/vmlinuz-7.3.5-gentoo-gentoo-dist root=UUID=f58fb93f-1681-423f-a6f2-ce6a6e8d9752 ro  
+		initrd	/boot/intel-uc.img /boot/amd-uc.img /boot/initramfs-7.3.5-gentoo-gentoo-dist.img
+	menuentry 'Gentoo GNU/Linux, with Linux 7.3.5-gentoo-gentoo-dist (recovery mode)' --class gentoo --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-7.3.5-gentoo-gentoo-dist-recovery-f58fb93f-1681-423f-a6f2-ce6a6e8d9752' {
+		search --no-floppy --fs-uuid --set=root f58fb93f-1681-423f-a6f2-ce6a6e8d9752
+
+### DRM CONECTORES
+card0-DP-1: disconnected
+card0-DP-2: connected
+card0-DP-3: disconnected
+card0-HDMI-A-1: connected
+card0-Writeback-1: unknown
+
+### ALSA
+**** List of PLAYBACK Hardware Devices ****
+card 0: Headset [Redragon Gaming Headset], device 0: USB Audio [USB Audio]
+  Subdevices: 1/1
+  Subdevice #0: subdevice #0
+card 1: PCH [HDA Intel PCH], device 0: ALC897 Analog [ALC897 Analog]
+  Subdevices: 0/1
+  Subdevice #0: subdevice #0
+card 1: PCH [HDA Intel PCH], device 1: ALC897 Digital [ALC897 Digital]
+  Subdevices: 1/1
+  Subdevice #0: subdevice #0
+card 2: HDMI [HDA ATI HDMI], device 3: Generic Digital [Generic Digital]
+  Subdevices: 1/1

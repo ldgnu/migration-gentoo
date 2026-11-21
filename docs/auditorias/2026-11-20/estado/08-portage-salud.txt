@@ -1,0 +1,86 @@
+### QCHECK
+Checking acct-group/audio ...
+  * 4 out of 4 files are good
+Checking acct-group/cdrom ...
+  * 4 out of 4 files are good
+Checking acct-group/cron ...
+  * 4 out of 4 files are good
+Checking acct-group/crontab ...
+  * 4 out of 4 files are good
+Checking acct-group/cuse ...
+  * 4 out of 4 files are good
+Checking acct-group/dialout ...
+  * 4 out of 4 files are good
+Checking acct-group/disk ...
+  * 4 out of 4 files are good
+Checking acct-group/floppy ...
+  * 4 out of 4 files are good
+Checking acct-group/gamemode ...
+  * 4 out of 4 files are good
+Checking acct-group/input ...
+  * 4 out of 4 files are good
+Checking acct-group/jobserver ...
+  * 4 out of 4 files are good
+Checking acct-group/kmem ...
+  * 4 out of 4 files are good
+Checking acct-group/kvm ...
+  * 4 out of 4 files are good
+Checking acct-group/locate ...
+  * 4 out of 4 files are good
+Checking acct-group/lp ...
+  * 4 out of 4 files are good
+
+### REVDEP
+ * This is the new python coded version
+ * Please report any bugs found using it.
+ * The original revdep-rebuild script is installed as revdep-rebuild.sh
+ * Please file bugs at: https://bugs.gentoo.org/
+ * Collecting system binaries and libraries
+ * Checking dynamic linking consistency
+
+Your system is consistent
+
+### DEPCLEAN
+
+ * Always study the list of packages to be cleaned for any obvious
+ * mistakes. Packages that are part of the world set will always
+ * be kept.  They can be manually added to this set with
+ * `emerge --noreplace <atom>`.  Packages that are listed in
+ * package.provided (see portage(5)) will be removed by
+ * depclean, even if they are part of the world set.
+ * 
+ * As a safety measure, depclean will not remove any packages
+ * unless *all* required dependencies have been resolved.  As a
+ * consequence of this, it often becomes necessary to run 
+ * `emerge --update --newuse --deep @world` prior to depclean.
+
+Calculating dependencies ... done!
+>>> No packages selected for removal by depclean
+>>> To see reverse dependencies, use --verbose
+Packages installed:   739
+Packages in world:    88
+Packages in system:   50
+Required packages:    739
+Number to remove:     0
+
+### NEWS
+News items:
+  [1]      2018-08-07  Migration required for OpenSSH with LDAP
+  [2]      2019-05-23  Change of ACCEPT_LICENSE default
+  [3]      2020-06-23  sys-libs/pam-1.4.0 upgrade
+  [4]      2021-01-30  New OpenRC Display Manager Initializer Scripts
+  [5]      2021-07-20  Perl 5.34 upgrade now stable
+  [6]      2021-09-29  Possible failure to preserve libraries
+  [7]      2021-10-08  OpenSSH RSA SHA-1 signatures
+  [8]      2021-10-18  migrating from glibc[crypt] to libxcrypt in stable
+  [9]      2021-10-24  netifrc DHCP client
+  [10]     2022-04-19  Migration to sys-apps/systemd-utils
+  [11]     2022-07-29  PipeWire sound server migration
+  [12]     2022-11-19  LVM2 default USE flag change
+  [13]     2022-11-21  systemd-tmpfiles --clean enabled by default
+  [14]     2022-12-27  Introduction of app-alternatives ebuilds
+  [15]     2023-05-11  OpenSSH directory configuration changes
+  [16]     2023-11-20  CUPS no longer directly depends on its filters
+  [17]     2024-01-18  Merging of installkernel-gentoo and installkernel-sys...
+  [18]     2024-02-01  GRUB upgrades
+  [19]     2024-02-26  installkernel is no longer implicitly installed

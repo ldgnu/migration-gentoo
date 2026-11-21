@@ -1,0 +1,41 @@
+### DMESG ERRORES
+[    0.176096] x86/cpu: SGX disabled or unsupported by BIOS.
+[    0.179257] CPA detected W^X violation: 8000000000000123 -> 0000000000000123 range: 0xffffffffc0400000 - 0xffffffffc0400fff PFN 100c00
+[    0.223002] MMIO Stale Data CPU bug present and SMT on, data leak possible. See https://www.kernel.org/doc/html/latest/admin-guide/hw-vuln/processor_mmio_stale_data.html for more details.
+[    0.232676] virt/tdx: TDX not supported by the host platform
+[    0.532124] Unsupported value for CONFIG_DRM_PANIC_SCREEN ('qr_code'), falling back to 'user'...
+[    2.478762] amdgpu 0000:03:00.0: [drm] Failed to setup vendor infoframe on connector HDMI-A-1: -22
+[    2.893460] ata4.00: Model 'ST1000LM024 HN-M101MBB', rev '2BA30001', applying quirks: brokenfpdmaaa nolpm
+[    2.893884] snd_hda_intel 0000:03:00.1: Cannot probe codecs, giving up
+[    2.895745] ENERGY_PERF_BIAS: Set to 'normal', was 'performance'
+[    2.896894] ata4.00: LPM support broken, forcing max_power
+[    2.903341] snd_hda_intel 0000:00:1f.3: Cannot probe codecs, giving up
+[    5.980121] spi-nor spi0.0: supply vcc not found, using dummy regulator
+[    5.982378] spi-nor spi0.1: supply vcc not found, using dummy regulator
+[    7.383261] exFAT-fs (sdb1): bogus allocation bitmap size(need : 953837, cur : 953838)
+[   19.018231] snd_hda_intel 0000:00:1f.3: Cannot probe codecs, giving up
+
+### TAINT
+0
+
+### SMART
+=== START OF SMART DATA SECTION ===
+SMART overall-health self-assessment test result: PASSED
+SMART/Health Information (NVMe Log 0x02, NSID 0xffffffff)
+Critical Warning:                   0x00
+Temperature:                        49 Celsius
+Available Spare:                    100%
+Available Spare Threshold:          10%
+Percentage Used:                    2%
+Power Cycles:                       1.261
+Power On Hours:                     4.914
+Unsafe Shutdowns:                   723
+Media and Data Integrity Errors:    0
+Warning  Comp. Temperature Time:    135
+Critical Comp. Temperature Time:    0
+Temperature Sensor 1:               69 Celsius
+Temperature Sensor 2:               49 Celsius
+
+### FW
+3005
+System Product Name

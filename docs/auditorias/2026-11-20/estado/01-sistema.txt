@@ -1,0 +1,51 @@
+### FECHA AUDITORIA
+2026-11-20T22:25:40-03:00
+### OS-RELEASE
+NAME='Gentoo'
+ID='gentoo'
+PRETTY_NAME='Gentoo Linux'
+VERSION='2.18'
+VERSION_ID='2.18'
+HOME_URL='https://www.gentoo.org/'
+SUPPORT_URL='https://www.gentoo.org/support/'
+BUG_REPORT_URL='https://bugs.gentoo.org/'
+ANSI_COLOR='1;32'
+### KERNEL
+Linux endymion 7.3.5-gentoo-gentoo-dist #2 SMP PREEMPT_DYNAMIC Thu Nov 19 23:52:16 -03 2026 x86_64 Intel(R) Core(TM) i5-10400F CPU @ 2.90GHz GenuineIntel GNU/Linux
+### UPTIME
+ 22:25:40 up  4:53,  1 user,  load average: 0,55, 0,75, 1,13
+### CPU
+CPU(s):                                   12
+Nombre del modelo:                        Intel(R) Core(TM) i5-10400F CPU @ 2.90GHz
+«Socket(s)»:                              1
+CPU(s) factor de escala MHz:              94%
+CPU MHz máx.:                             4300,0000
+CPU MHz mín.:                             800,0000
+CPU(s) del nodo NUMA 0:                   0-11
+### MEM
+               total       usado       libre  compartido   búf/caché  disponible
+Mem:            15Gi       6,6Gi       3,9Gi       232Mi       5,6Gi       8,9Gi
+Inter:          15Gi       2,2Gi        13Gi
+### DISKS
+NAME          SIZE FSTYPE MOUNTPOINTS      LABEL UUID
+sda         465,8G                               
+└─sda1      465,8G        /mnt/PirateGames       
+sdb         931,5G                               
+└─sdb1      931,5G        /mnt/PirateNW          
+sdc         111,8G                               
+├─sdc1        260M                               
+├─sdc2        128M                               
+└─sdc3      111,4G                               
+nvme0n1     476,9G                               
+├─nvme0n1p1     1G        /efi                   
+├─nvme0n1p2    16G        [SWAP]                 
+├─nvme0n1p3   100G        /                      
+└─nvme0n1p4 359,9G        /home                  
+### DF
+S.ficheros     Tipo     Tamaño Usados  Disp Uso% Montado en
+/dev/nvme0n1p3 ext4        98G    37G   57G  40% /
+efivarfs       efivarfs   192K    89K   99K  48% /sys/firmware/efi/efivars
+/dev/nvme0n1p4 ext4       354G   132G  205G  40% /home
+/dev/nvme0n1p1 vfat      1022M   176K 1022M   1% /efi
+/dev/sdb1      exfat      932G   775G  157G  84% /mnt/PirateNW
+/dev/sda1      ntfs3      466G   401G   66G  86% /mnt/PirateGames
