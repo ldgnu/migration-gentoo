@@ -1,6 +1,6 @@
 S.ficheros     Tipo     Tamaño Usados  Disp Uso% Montado en
 devtmpfs       devtmpfs    10M      0   10M   0% /dev
-tmpfs          tmpfs      7,8G   135M  7,7G   2% /dev/shm
+tmpfs          tmpfs      7,8G   139M  7,7G   2% /dev/shm
 tmpfs          tmpfs      7,8G   1,7M  7,8G   1% /run
 /dev/nvme0n1p3 ext4        98G    37G   57G  40% /
 efivarfs       efivarfs   192K    89K   99K  48% /sys/firmware/efi/efivars

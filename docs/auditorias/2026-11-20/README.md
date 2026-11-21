@@ -112,7 +112,10 @@ repo va redactada, pero el original sigue ahí. Conviene rotar la contraseña y 
 copias.
 
 **A-04. 102 rebuilds por ABI 32 bits.**
-Ver §4. Planificarlo en una sesión larga (`screen`/`tmux`), no en un rato suelto.
+Ver §4. **En curso desde el 21/11** en una sesión `screen` (`abi32`), con salida en
+`/var/log/emerge-abi32.log`. Se lanzó con `--keep-going` para que un paquete que falle no
+corte el resto. Antes de arrancar se corrigió la línea de `package.use/00cpu-flags`, que
+tenía un `*/*` duplicado.
 
 ### P2 — decisiones que faltan y deuda chica
 
