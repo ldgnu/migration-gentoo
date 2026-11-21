@@ -233,7 +233,7 @@ original.
 | Backup de configuración | nuevo `configs/endymion/` generado por `scripts/capturar-configs.sh`, con manifiesto de hashes |
 | Repositorio | renombrado a `migration-gentoo`; README con contexto (qué es Gentoo, qué es endymion) |
 | Documentación obsoleta | corregidos `hardware.md` (ESP de 1 GiB), `retomar.md` (reescrito para endymion), `decisiones.md` (alcance), `indice.md` (checklist real) |
-| Errores | nuevo [`../errores.md`](../errores.md) con 25 casos y la forma de evitarlos |
+| Errores | nuevo [`../errores.md`](../../errores.md) con 25 casos y la forma de evitarlos |
 
 Lo que sigue abierto: firewall (necesita `NF_TABLES` en el kernel), rotación de la
 contraseña, cifrado en reposo y backup de datos.
