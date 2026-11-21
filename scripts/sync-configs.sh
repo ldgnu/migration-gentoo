@@ -27,7 +27,7 @@ ARCHIVOS=(
   "etc/portage/repos.conf/gentoo.conf"
 )
 
-export SSHPASS="${SSHPASS:-5512}"
+export SSHPASS="${SSHPASS:?definir SSHPASS en el entorno}"
 SSH="sshpass -e ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR -o ConnectTimeout=6 root@${VM_IP}"
 
 for f in "${ARCHIVOS[@]}"; do
