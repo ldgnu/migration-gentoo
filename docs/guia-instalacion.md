@@ -446,6 +446,10 @@ dracut --force /boot/initramfs-$(uname -r).img $(uname -r)
 
 ## 9. Escritorio: Xorg + i3
 
+> **En endymion se usó Sway, no i3.** Este bloque queda para quien prefiera Xorg; el camino
+> que se ejecutó de verdad es el §9-bis (Wayland + Sway) y es el que está respaldado en
+> `configs/endymion/home/ldgnu/.config/sway/`.
+
 ```bash
 # (target)
 emerge --ask x11-base/xorg-drivers x11-drivers/xf86-input-libinput
@@ -662,7 +666,6 @@ Checklist final:
 ## Referencias
 
 - Handbook AMD64 (es): <https://wiki.gentoo.org/wiki/Handbook:AMD64/es>
-- Copia local offline: `~/docs/gentoo-handbook/`
-- Decisions y bitácora: `docs/decisiones.md`, `docs/bitacora.md`
-- Migración de los 493 paquetes de CachyOS: `docs/migracion.md`
-- Hardware y rutas del menú del kernel: `docs/hardware.md`
+- Decisiones y bitácora: [`decisiones.md`](decisiones.md), [`bitacora.md`](bitacora.md)
+- Qué hacer con los paquetes de la distro anterior: [`migracion.md`](migracion.md)
+- Hardware y rutas del menú del kernel: [`hardware.md`](hardware.md)

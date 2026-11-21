@@ -70,6 +70,7 @@ backup). [La auditoría completa](docs/auditorias/2026-11-20/README.md).
 | Entender qué pasó, en orden | [`docs/cronologia.md`](docs/cronologia.md) |
 | Leer la opinión sin filtro | [`docs/experiencia.md`](docs/experiencia.md) |
 | Ver qué está roto hoy | [`docs/auditorias/2026-11-20/`](docs/auditorias/2026-11-20/README.md) |
+| No repetir mis errores | [`docs/errores.md`](docs/errores.md) |
 
 ### La instalación
 
@@ -87,6 +88,7 @@ backup). [La auditoría completa](docs/auditorias/2026-11-20/README.md).
 | Documento | Qué vas a encontrar |
 |---|---|
 | [`docs/experiencia.md`](docs/experiencia.md) | Qué me gustó, qué no, con qué renegué y la comparación con Arch |
+| [`docs/errores.md`](docs/errores.md) | 25 errores con causa y forma de evitarlos, del backup que no hice al `CONFIG_TUN` |
 | [`docs/conceptos.md`](docs/conceptos.md) | Las explicaciones con analogías |
 | [`docs/auditorias/2026-11-20/README.md`](docs/auditorias/2026-11-20/README.md) | El estado real del sistema y 19 hallazgos priorizados |
 
@@ -121,8 +123,13 @@ backup). [La auditoría completa](docs/auditorias/2026-11-20/README.md).
 ## Estado
 
 En uso desde el 17/11. Portage consistente, Sway con Steam y Tailscale andando.
-Lo que falta está en la [auditoría](docs/auditorias/2026-11-20/README.md): los rebuilds por
-ABI de 32 bits, el firewall y dos decisiones que nunca se registraron (cifrado y backup).
+Siete de los 19 hallazgos de la auditoría ya están cerrados: el backup de configuración, el
+`cpu-flags`, la documentación obsoleta y el secreto que estaba en un script.
+
+Sigue abierto: los 102 rebuilds por ABI de 32 bits (en curso desde el 21/11), el firewall
+—el kernel no tiene `NF_TABLES`— y dos decisiones que nunca se registraron: cifrado en
+reposo y backup de datos. El detalle está en la
+[auditoría](docs/auditorias/2026-11-20/README.md#9-actualización--2026-11-21).
 
 ## Reglas del repositorio
 

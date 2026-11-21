@@ -219,3 +219,21 @@ sudo tail -100 /var/log/emerge.log
   registro, no de buscar secretos.
 - Las direcciones de la LAN se listan porque el repo documenta esta máquina; si se publica,
   conviene revisar `estado/12-red-log.txt`.
+
+## 9. Actualización — 2026-11-21
+
+Cambios posteriores al corte de esta auditoría. Se anotan acá para no reescribir la foto
+original.
+
+| Tema | Estado |
+|---|---|
+| ABI de 32 bits (A-04) | **en curso**: 102 paquetes en una sesión `screen` llamada `abi32`, salida en `/var/log/emerge-abi32.log`, con `--keep-going` |
+| `package.use/00cpu-flags` (A-10) | corregido: tenía un `*/*` duplicado. Backup en `/root/00cpu-flags.bak` |
+| Credencial en `sync-configs.sh` (A-03) | removida del árbol del repo (público). **Sigue en el historial de git**: hay que rotar la contraseña o reescribir la historia |
+| Backup de configuración | nuevo `configs/endymion/` generado por `scripts/capturar-configs.sh`, con manifiesto de hashes |
+| Repositorio | renombrado a `migration-gentoo`; README con contexto (qué es Gentoo, qué es endymion) |
+| Documentación obsoleta | corregidos `hardware.md` (ESP de 1 GiB), `retomar.md` (reescrito para endymion), `decisiones.md` (alcance), `indice.md` (checklist real) |
+| Errores | nuevo [`../errores.md`](../errores.md) con 25 casos y la forma de evitarlos |
+
+Lo que sigue abierto: firewall (necesita `NF_TABLES` en el kernel), rotación de la
+contraseña, cifrado en reposo y backup de datos.

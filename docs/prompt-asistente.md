@@ -1,3 +1,7 @@
+> **Histórico.** Este es el prompt que se usaba para pedir asistencia desde el celular
+> durante la instalación. Se conserva como técnica; algunos datos (interfaces, rutas,
+> versión del kernel) corresponden a la etapa previa y ya no aplican a endymion.
+
 # Prompt completo para el asistente de instalación
 
 Texto autocontenido para usar como instrucción de sistema en un agente de chat (Telegram,
