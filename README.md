@@ -1,9 +1,23 @@
-# Gentoo en endymion
+# Migración a Gentoo
 
 Un registro de instalación, contado con las capturas del proceso.
 
-**endymion** — i5-10400F, 15 GiB, Radeon RX 6600, NVMe de 512 GB.
-Gentoo amd64, OpenRC, kernel 7.3.5, Sway sobre Wayland.
+## Qué es Gentoo
+
+Gentoo es una distribución de Linux donde el software se compila en tu propia máquina. No
+hay un instalador que copie archivos genéricos: elegís qué se compila, con qué opciones
+(`USE` flags), qué kernel corre y qué sistema de inicio arranca. Se paga con tiempo de
+compilación; se gana entender qué hay en cada capa del sistema.
+
+Este repo no es un tutorial genérico: es lo que pasó en una migración real, con los comandos,
+las salidas y los errores tal como aparecieron.
+
+## Contexto
+
+**endymion** es el nombre de mi PC de escritorio: i5-10400F, 15 GiB de RAM, Radeon RX 6600 y
+un NVMe de 512 GB. Antes tenía CachyOS (Arch con btrfs y LUKS); hoy corre Gentoo amd64 con
+OpenRC, kernel 7.3.5 y Sway sobre Wayland.
+
 Instalado el **17/11/2026**, auditado el **20/11/2026**.
 
 ![El @world de 61 paquetes terminando](docs/registro-instalacion/capturas/20261117T191021Z-fin-world-61-de-61.jpg)
