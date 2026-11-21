@@ -1,4 +1,8 @@
 #!/bin/bash
+# OBSOLETO desde el 2026-11-21. Reemplazado por scripts/capturar-configs.sh, que lee la
+# configuración local de endymion. Este script sigue apuntando a la VM (192.168.122.34) y
+# escribe en configs/ con el esquema viejo; se conserva como registro.
+#
 # Sincroniza los archivos de configuración del sistema Gentoo instalado hacia el repo.
 #
 # Uso: ./scripts/sync-configs.sh [IP]

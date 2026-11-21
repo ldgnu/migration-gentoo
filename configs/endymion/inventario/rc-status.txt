@@ -42,12 +42,12 @@ Runlevel: default
  elogind                                                           [  started  ]
  net.eno1                                                          [  started  ]
  netmount                                                          [  started  ]
- seatd                                                 [  started 07:15:20 (0) ]
+ seatd                                                 [  started 07:32:15 (0) ]
  sshd                                                              [  started  ]
- tailscale                                             [  started 02:19:50 (0) ]
+ tailscale                                             [  started 02:36:45 (0) ]
  local                                                             [  started  ]
 Dynamic Runlevel: hotplugged
- user.ldgnu                                            [  started 07:14:48 (0) ]
+ user.ldgnu                                            [  started 07:31:43 (0) ]
 Dynamic Runlevel: needed/wanted
- dbus                                                  [  started 07:15:28 (0) ]
+ dbus                                                  [  started 07:32:23 (0) ]
 Dynamic Runlevel: manual

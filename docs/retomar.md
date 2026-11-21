@@ -1,55 +1,58 @@
 # Cómo retomar
 
-Procedimiento para volver al chroot después de apagar la VM. El sistema instalado vive en
-el disco; lo que se pierde al apagar es el live y sus montajes.
+En endymion hay dos escenarios, y solo uno requiere trabajo.
 
-## 1. Arrancar desde el CD
+## El sistema arranca
 
-La VM todavía no bootea sola: no hay kernel ni bootloader instalados. En el menú de
-SeaBIOS, `F12` o `Esc` para elegir el dispositivo de arranque, y seleccionar el CD.
+Nada que hacer. GRUB arranca el kernel 7.3.5, OpenRC levanta los servicios y Sway queda
+disponible en tty1. Si algo quedó raro después de una actualización, revisá primero:
 
-## 2. Montar y entrar
-
+```sh
+uname -r
+rc-status --all
+dmesg --level=err,warn | tail -20
 ```
-swapon /dev/vda3
-mount /dev/vda4 /mnt/gentoo
-mount /dev/vda2 /mnt/gentoo/boot
+
+## El sistema no arranca: entrar desde el live
+
+Con el USB de Gentoo y el sistema apagado. Las particiones son las de `configs/endymion/etc/fstab`;
+los UUID están ahí para confirmar con `blkid`.
+
+```sh
+# 1. Montar el sistema instalado
+swapon /dev/nvme0n1p2
+mount /dev/nvme0n1p3 /mnt/gentoo
+mount /dev/nvme0n1p1 /mnt/gentoo/efi
+mount /dev/nvme0n1p4 /mnt/gentoo/home
+
+# 2. Entrar
 arch-chroot /mnt/gentoo
 ```
 
-`arch-chroot` monta `/proc`, `/sys`, `/dev` y `/run`, y copia `resolv.conf`. No hace falta
-hacerlo a mano.
+`arch-chroot` monta `/proc`, `/sys`, `/dev` y `/run`, y copia `resolv.conf`.
 
-## 3. Verificar que quedó bien
+Antes de salir, o al terminar de arreglar:
 
+```sh
+exit
+umount -R /mnt/gentoo
+swapoff /dev/nvme0n1p2
+reboot
 ```
-findmnt /mnt/gentoo
-findmnt /mnt/gentoo/boot
-swapon --show
-ls /usr/src
-```
 
-## Dónde quedamos
+## Si el problema es el arranque
 
-Estado al 2026-11-16:
+| Síntoma | Qué mirar |
+|---|---|
+| No aparece la entrada Gentoo | `efibootmgr -v`; reinstalar con `grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=Gentoo` |
+| Aparece pero no bootea | `grub-mkconfig -o /boot/grub/grub.cfg` desde el chroot; revisar que el `initramfs` exista en `/boot` |
+| Bootea y queda en `login:` sin red | `rc-service net.eno1 status`; `ip -br a` |
+| Bootea sin gráficos | `eselect kernel list`, `ls /lib/modules`, y el log de `dmesg` |
 
-- Particionado, formateo y montaje: listos.
-- Stage3 extraído y verificado.
-- Perfil: `default/linux/amd64/23.0/no-multilib`.
-- `make.conf`, USE flags, locales: listos.
-- Sistema base: 402 paquetes instalados.
-- `fstab`, hostname y contraseña de root: listos.
-- Bootloader: paquete instalado, `grub-install` pendiente con el target correcto (`/dev/vda`).
-- Kernel: **no instalado**. `/usr/src` vacío.
+Hay dos kernels instalados (7.3.5 y 6.18.63) y ambos están en el menú de GRUB: si el nuevo
+falla, se elige el viejo desde "Advanced options".
 
-## Lo que falta
+## La documentación de la instalación original
 
-1. `emerge --ask sys-kernel/gentoo-sources`
-2. `eselect kernel set 1`
-3. Configurar (`make localmodconfig` o partir de `/proc/config.gz`, después `make nconfig`)
-4. `make -j6 && make modules_install && make install`
-5. `grub-install /dev/vda`
-6. `grub-mkconfig -o /boot/grub/grub.cfg`
-
-Drivers que no pueden faltar y tienen que ser `=y` si no hay initramfs:
-`VIRTIO_BLK`, `VIRTIO_PCI`, `EXT4_FS`, `DEVTMPFS`, `DEVTMPFS_MOUNT`.
+El procedimiento de la VM (BIOS, `/dev/vda`) está en [`vm.md`](vm.md) como registro histórico.
+No aplica a endymion, que es UEFI sobre `/dev/nvme0n1`.

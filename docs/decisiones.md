@@ -28,6 +28,11 @@ Elegido: servidor, sin entorno gráfico.
 Motivo: superficie acotada, objetivos verificables, no mezcla dos aprendizajes.
 Consecuencias: queda fuera X11, audio, GPU y todo lo de escritorio.
 
+**Corrección (2026-11-17):** el alcance real terminó siendo escritorio. Al pasar al hierro
+se instaló Sway, PipeWire, Bluetooth, mesa con `amdgpu` y Steam. La decisión de "servidor"
+valía para la VM y quedó sin efecto; ver [`guia-instalacion.md`](guia-instalacion.md) y
+[`auditorias/2026-11-20/README.md`](auditorias/2026-11-20/README.md).
+
 ### 2026-11-15 — Init: OpenRC
 Opciones: OpenRC / systemd.
 Elegido: OpenRC.

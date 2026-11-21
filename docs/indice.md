@@ -59,7 +59,7 @@ Acá está el checklist para ir marcando lo que se hizo en el fierro. La instala
 
 | # | Paso | Hecho |
 |---|---|---|
-| 20 | `fstab` con `LABEL=root` / `LABEL=EFI` / `LABEL=swap` | [ ] |
+| 20 | `fstab` (por `LABEL` o por UUID; endymion quedó por UUID) | [ ] |
 | 21 | hostname `qwertoo` + `/etc/hosts` | [ ] |
 | 22 | `net.enp1s0` en el runlevel default | [ ] |
 | 23 | `sysklogd`, `cronie`, `chronyd`, `sshd` | [ ] |

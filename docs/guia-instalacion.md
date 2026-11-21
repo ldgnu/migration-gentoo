@@ -340,6 +340,10 @@ LABEL=swap   none   swap   sw                 0 0
 EOF
 ```
 
+Los `LABEL` funcionan porque los crean los `mkfs` de los pasos anteriores. Sirven igual los
+UUID: así quedó endymion, y están en `configs/endymion/etc/fstab` para copiar. Verificalos con
+`blkid` antes de escribirlos.
+
 ```bash
 echo qwertoo > /etc/hostname
 cat > /etc/hosts <<'EOF'

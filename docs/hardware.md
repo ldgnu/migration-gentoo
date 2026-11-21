@@ -21,7 +21,7 @@ Reemplazan las suposiciones de la versión genérica de esta guía.
 
 El sistema actual arranca en **UEFI**, no en BIOS. Eso cambia dos cosas respecto de la VM:
 
-1. Hace falta una **EFI System Partition** (en este equipo ya existe: `nvme0n1p1`, 4 GB, vfat).
+1. Hace falta una **EFI System Partition** (en este equipo ya existe: `nvme0n1p1`, 1 GiB, vfat).
 2. El bootloader se instala con `--target=x86_64-efi`, y `efibootmgr` pasa a ser útil.
 
 Sin Secure Boot, como se decidió. Eso evita firmar kernel y módulos.
@@ -30,7 +30,7 @@ Sin Secure Boot, como se decidió. Eso evita firmar kernel y módulos.
 
 | Disco | Tamaño | Contenido actual |
 |---|---|---|
-| `nvme0n1` | 476 GB | CachyOS: p1 4G EFI + p2 472G LUKS/btrfs |
+| `nvme0n1` | 476 GB | Antes: CachyOS (p1 4G EFI + p2 472G LUKS/btrfs). Hoy: p1 1G ESP, p2 16G swap, p3 100G raíz, p4 360G home |
 | `sda` | 465 GB | NTFS, datos (`/mnt/PirateGames`) |
 | `sdb` | 931 GB | exFAT, datos (`/mnt/PirateNW`) |
 | `sdc` | 111 GB | Windows: p1 EFI 260M, p2 MSR, p3 NTFS |
@@ -253,7 +253,7 @@ Todo lo demás se agrega cuando se necesite.
 3. **Confirmar el modo de arranque**: UEFI, Secure Boot desactivado en el firmware.
 4. **Anotar los UUID** de los discos de datos si se van a montar en el `fstab`.
 5. **Tener otra máquina o el celular** para leer el handbook durante la instalación.
-6. Saber que `nvme0n1p1` es la partición EFI actual y que se puede reutilizar (4 GB, vfat)
+6. Saber que `nvme0n1p1` es la partición EFI actual y que se puede reutilizar (1 GiB, vfat)
    o reformatear.
 
 ## Orden de instalación en este equipo

@@ -1,10 +1,10 @@
 S.ficheros     Tipo     Tamaño Usados  Disp Uso% Montado en
 devtmpfs       devtmpfs    10M      0   10M   0% /dev
-tmpfs          tmpfs      7,8G   139M  7,7G   2% /dev/shm
+tmpfs          tmpfs      7,8G   510M  7,3G   7% /dev/shm
 tmpfs          tmpfs      7,8G   1,7M  7,8G   1% /run
-/dev/nvme0n1p3 ext4        98G    37G   57G  40% /
+/dev/nvme0n1p3 ext4        98G    37G   56G  40% /
 efivarfs       efivarfs   192K    89K   99K  48% /sys/firmware/efi/efivars
-/dev/nvme0n1p4 ext4       354G    33G  303G  10% /home
+/dev/nvme0n1p4 ext4       354G    48G  289G  15% /home
 /dev/nvme0n1p1 vfat      1022M   176K 1022M   1% /efi
 /dev/sdb1      exfat      932G   775G  157G  84% /mnt/PirateNW
 /dev/sda1      ntfs3      466G   401G   66G  86% /mnt/PirateGames

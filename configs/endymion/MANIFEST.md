@@ -1,6 +1,6 @@
 # Manifiesto — configuración de endymion
 
-Generado: 2026-11-21T00:47:37-03:00
+Generado: 2026-11-21T01:04:32-03:00
 Kernel: 7.3.5-gentoo-gentoo-dist
 
 ```
@@ -55,11 +55,11 @@ cc0f534569771f0131aa4513d669c773c149987cd1410842d7f6cd158c3e55b1  ./home/ldgnu/.
 0f103b0da34b0953431c07f48553c4c3f1e7011a85fe69f3c9bf63402a410bdd  ./home/ldgnu/.local/bin/wmenu-run
 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  ./inventario/blkid.txt
 9ea13255a804eff05e42d62548f5c18b1e204f55866726e70959f373cf2a6359  ./inventario/cmdline.txt
-9073d1805bf7246e2633b7184c95bef8d09d094d03b5609eb475a48a7e6b3e46  ./inventario/df.txt
+28b58d1aa5064c13b104de34ad23edbca1b1b29dc4fe24a35049dbfc84df3a98  ./inventario/df.txt
 94bae8e00c9572a0434b7d57b2e74f697324619a8611e51f06b371df1ab3dc42  ./inventario/dmi.txt
 18afeec5b3129a7944da6386033c12ce28950ea1dedf6e936e37df8484f8e3da  ./inventario/efibootmgr.txt
-f801d97090620763fe56840f2c823d7c4c44cddfab2ab85078d607af98b1ee7a  ./inventario/fecha.txt
-4f7f6bd6fa8711ccb67c54765f6a016260132b379f361cf2fa7e82ce5b9eaa61  ./inventario/free.txt
+e0750e62b5b5c8d39d1b8331afd8eebb76196e9ffa5925673a1681a0df94e6d0  ./inventario/fecha.txt
+85abdbad40ac96ca2e0134cd12425f09d947995619339f3d5eb3498fda4d4158  ./inventario/free.txt
 9ba7f005afaa6d83a2daadf7086853a10c656905cdc316100a1caadcd7ddb2a6  ./inventario/kernels.txt
 7a3f8db99b8b7f7fe3737e0592e225278c0e328e9a358e89c7ffe1138d37cdae  ./inventario/lsblk.txt
 ad29372a2a44ebe4e7ae56deda2bd7de2e95cc66bdb6b0aa20ec601ae6aadf4c  ./inventario/lsmod.txt
@@ -67,7 +67,7 @@ ad29372a2a44ebe4e7ae56deda2bd7de2e95cc66bdb6b0aa20ec601ae6aadf4c  ./inventario/l
 51edc3bd46d9975ea615291b440efbe0c6ed200576b3bc5165c8b3fe59131266  ./inventario/lsusb.txt
 c40a16efd144f431db4a1a8748ea7062bab59b6f10d38217301968fd265613f7  ./inventario/paquetes.txt
 5645308941f73aa94bd41a250a61802963bfc13767bad5f1658ad297fbca66d5  ./inventario/portage-resumen.txt
-ad3c89b23f41de633fa60b599df4163deb37044a6a2ec2f943f89da17454b67b  ./inventario/rc-status.txt
+daf58a0dd59848794d29eb176b1bbd90ea68858834d43a3cdd523a08523718cc  ./inventario/rc-status.txt
 8475bba4dcf337820deb147de521025e6414822c1dd461a6fef8bcc06a41010f  ./inventario/rc-update.txt
 883f6537ffdbe80a0bac84acc4d8887e98935e8c66cd48b12bf402ad1e166b9d  ./inventario/uname.txt
 73ba6c20474455d547d259060de5b3246af48fe72012695baf11c750b8f7a6f9  ./var/lib/portage/world
